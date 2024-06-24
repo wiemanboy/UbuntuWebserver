@@ -4,16 +4,14 @@ services:
   reverse-proxy:
     image: traefik
     command:
-      - --log.level=DEBUG
       - --api.insecure=true
       - --providers.docker
       - --providers.docker.exposedbydefault=true
       - --entrypoints.web.address=:80
       - --entrypoints.websecure.address=:443
-      - --certificatesresolvers.default-resolver.acme.tlschallenge=true
-      - --certificatesresolvers.default-resolver.acme.caserver=https://acme-staging-v02.api.letsencrypt.org/directory
-      - --certificatesresolvers.default-resolver.acme.email=wiemanboy@gmail.com
-      - --certificatesresolvers.default-resolver.acme.storage=/letsencrypt/acme.json
+      - --certificatesresolvers.jarnowiemannl-resolver.acme.tlschallenge=true
+      - --certificatesresolvers.jarnowiemannl-resolver.acme.email=wiemanboy@gmail.com
+      - --certificatesresolvers.jarnowiemannl-resolver.acme.storage=/letsencrypt/jarnowiemannl.json
     ports:
       - "80:80"
       - "443:443"
@@ -26,14 +24,8 @@ services:
     image: wiemanboy/wiemansite
     labels:
       - traefik.http.routers.WiemanSite.rule=Host(`jarnowieman.nl`)
-      - traefik.http.routers.WiemanSite.entrypoints=web
-
-  WiemanSiteSecure:
-    image: wiemanboy/wiemansite
-    labels:
-      - traefik.http.routers.WiemanSiteSecure.rule=Host(`jarnowieman.nl`)
-      - traefik.http.routers.WiemanSiteSecure.entrypoints=websecure
-      - traefik.http.routers.WiemanSiteSecure.tls.certresolver=default-resolver
+      - traefik.http.routers.WiemanSite.entrypoints=websecure
+      - traefik.http.routers.WiemanSite.tls.certresolver=jarnowiemannl-resolver
 
   minio:
     image: minio/minio:RELEASE.2024-06-13T22-53-53Z-cpuv1
@@ -46,4 +38,6 @@ services:
     labels:
       - traefik.http.routers.minio.rule=Host(`dev.jarnowieman.nl`) && Path(`/blobstore`)
       - traefik.http.services.minio.loadbalancer.server.port=9000
-      - traefik.http.routers.minio.entrypoints=web
+      - traefik.http.routers.minio.entrypoints=websecure
+      - traefik.http.routers.WiemanSiteSecure.tls.certresolver=jarnowiemannl-resolver
+
