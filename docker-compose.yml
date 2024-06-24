@@ -17,7 +17,7 @@ services:
   WiemanSite:
     image: wiemanboy/wiemansite
     labels:
-      - traefik.http.routers.WiemanSite.rule=Host(`jarnowieman.duckdns.org`)
+      - traefik.http.routers.WiemanSite.rule=Host(`jarnowieman.nl`)
       - traefik.http.routers.WiemanSite.entrypoints=web
 
   minio:
@@ -29,6 +29,6 @@ services:
       - ~/minio/data:/data
     command: server /data --console-address ":9001"
     labels:
-      - traefik.http.routers.minio.rule=Host(`jarnowieman.duckdns.org`) && Path(`/blobstore`)
+      - traefik.http.routers.minio.rule=Host(`dev.jarnowieman.nl`) && Path(`/blobstore`)
       - traefik.http.services.minio.loadbalancer.server.port=9000
       - traefik.http.routers.minio.entrypoints=web
