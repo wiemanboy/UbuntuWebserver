@@ -7,18 +7,32 @@ services:
       - --api.insecure=true
       - --providers.docker
       - --providers.docker.exposedbydefault=true
+
+        # Entrypoints
       - --entrypoints.web.address=:80
+      - --entrypoints.websecure.address=:443
+      - --entrypoints.web.http.redirections.entryPoint.to=websecure
+      - --entrypoints.web.http.redirections.entryPoint.scheme=https
+      - --entrypoints.web.http.redirections.entrypoint.permanent=true
+
+      # Let's Encrypt certificate resolver
+      - --certificatesresolvers.jarnowiemannl-resolver.acme.tlschallenge=true
+      - --certificatesresolvers.jarnowiemannl-resolver.acme.email=wiemanboy@gmail.com
+      - --certificatesresolvers.jarnowiemannl-resolver.acme.storage=/letsencrypt/jarnowiemannl.json
     ports:
       - "80:80"
+      - "443:443"
       - "8080:8080"
     volumes:
+      - ./letsencrypt:/letsencrypt
       - /var/run/docker.sock:/var/run/docker.sock
 
   WiemanSite:
     image: wiemanboy/wiemansite
     labels:
       - traefik.http.routers.WiemanSite.rule=Host(`jarnowieman.nl`)
-      - traefik.http.routers.WiemanSite.entrypoints=web
+      - traefik.http.routers.WiemanSite.entrypoints=websecure
+      - traefik.http.routers.WiemanSite.tls.certresolver=jarnowiemannl-resolver
 
   minio:
     image: minio/minio:RELEASE.2024-06-13T22-53-53Z-cpuv1
@@ -31,4 +45,5 @@ services:
     labels:
       - traefik.http.routers.minio.rule=Host(`dev.jarnowieman.nl`) && Path(`/blobstore`)
       - traefik.http.services.minio.loadbalancer.server.port=9000
-      - traefik.http.routers.minio.entrypoints=web
+      - traefik.http.routers.minio.entrypoints=websecure
+      - traefik.http.routers.minio.tls.certresolver=jarnowiemannl-resolver
