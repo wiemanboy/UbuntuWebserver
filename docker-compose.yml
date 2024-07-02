@@ -37,15 +37,17 @@ services:
       - ./letsencrypt:/letsencrypt
       - /var/run/docker.sock:/var/run/docker.sock
 
-  WiemanSite:
+  wiemansite:
     image: wiemanboy/wiemansite
     labels:
       - traefik.http.routers.WiemanSite.rule=Host(`jarnowieman.nl`)
       - traefik.http.routers.WiemanSite.entrypoints=websecure
       - traefik.http.routers.WiemanSite.tls.certresolver=jarnowiemannl-resolver
 
-  minio:
-    image: minio/minio:RELEASE.2024-06-13T22-53-53Z-cpuv1
+  blobstore:
+    build:
+        context: ./blobstore
+        dockerfile: Dockerfile
     environment:
       MINIO_ROOT_USER: "username"
       MINIO_ROOT_PASSWORD: "password"
