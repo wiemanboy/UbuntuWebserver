@@ -57,7 +57,12 @@ services:
       - ~/minio/data:/data
     command: server /data --console-address ":9001"
     labels:
-      - traefik.http.routers.minio.rule=Host(`dev.jarnowieman.nl`)
+      - traefik.http.routers.minio.rule=Host(`jarnowieman.nl`) && PathPrefix(`/assets/`)
+
+      - traefik.http.routers.minio.middlewares=minio-replacepath@docker
+      - traefik.http.middlewares.minio-replacepath.replacepathregex.regex=^/assets/(.*)
+      - traefik.http.middlewares.minio-replacepath.replacepathregex.replacement=/wiemansite/$1
+
       - traefik.http.services.minio.loadbalancer.server.port=9000
       - traefik.http.routers.minio.entrypoints=websecure
       - traefik.http.routers.minio.tls.certresolver=jarnowiemannl-resolver
