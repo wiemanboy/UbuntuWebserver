@@ -57,12 +57,19 @@ services:
       - ~/minio/data:/data
     command: server /data --console-address ":9001"
     labels:
-      - traefik.http.routers.minio.rule=Host(`jarnowieman.nl`) && PathPrefix(`/assets/`)
+      # Direct user to wiemansite public bucket
+      - traefik.http.routers.blobstore.rule=Host(`jarnowieman.nl`) && PathPrefix(`/assets/`)
+      - traefik.http.routers.blobstore.middlewares=blobstore-replacepath@docker
+      - traefik.http.middlewares.blobstore-replacepath.replacepathregex.regex=^/assets/(.*)
+      - traefik.http.middlewares.blobstore-replacepath.replacepathregex.replacement=/wiemansite/$1
+      - traefik.http.services.blobstore.loadbalancer.server.port=9000
+      - traefik.http.routers.blobstore.entrypoints=websecure
+      - traefik.http.routers.blobstore.tls.certresolver=jarnowiemannl-resolver
 
-      - traefik.http.routers.minio.middlewares=minio-replacepath@docker
-      - traefik.http.middlewares.minio-replacepath.replacepathregex.regex=^/assets/(.*)
-      - traefik.http.middlewares.minio-replacepath.replacepathregex.replacement=/wiemansite/$1
-
-      - traefik.http.services.minio.loadbalancer.server.port=9000
-      - traefik.http.routers.minio.entrypoints=websecure
-      - traefik.http.routers.minio.tls.certresolver=jarnowiemannl-resolver
+      # Redirect discord to verify domain with https
+      - traefik.http.routers.discord-redirect.rule=Host(`jarnowieman.nl`) && PathPrefix(`/.well-known/`)
+      - traefik.http.routers.discord-redirect.middlewares=discord-replacepath@docker
+      - traefik.http.middlewares.discord-replacepath.replacepathregex.regex=^/.well-known/(.*)
+      - traefik.http.middlewares.discord-replacepath.replacepathregex.replacement=/wiemansite/auth/$1
+      - traefik.http.routers.discord-redirect.entrypoints=websecure
+      - traefik.http.routers.discord-redirect.tls.certresolver=jarnowiemannl-resolver
