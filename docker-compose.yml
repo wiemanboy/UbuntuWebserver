@@ -44,6 +44,26 @@ services:
       - traefik.http.routers.WiemanSite.entrypoints=websecure
       - traefik.http.routers.WiemanSite.tls.certresolver=jarnowiemannl-resolver
 
+  wiemancdn:
+    image: wiemanboy/wiemancdn
+    ports:
+      - 8000:8000
+    environment:
+      S3_ENDPOINT: "http://blobstore:9000"
+      ACCESS_KEY_ID: "username"
+      SECRET_ACCESS_KEY: "password"
+      BUCKET_NAME: "wiemansite"
+      REGION: "s-east-1"
+    labels:
+      # Direct user to wiemansite public bucket
+      - traefik.http.routers.wiemancdn.rule=Host(`jarnowieman.nl`) && PathPrefix(`/assets/`)
+      - traefik.http.routers.wiemancdn.middlewares=wiemancdn-replacepath@docker
+      - traefik.http.middlewares.wiemancdn-replacepath.replacepathregex.regex=^/assets/(.*)
+      - traefik.http.middlewares.wiemancdn-replacepath.replacepathregex.replacement=/api/files/$1
+      - traefik.http.services.wiemancdn.loadbalancer.server.port=8000
+      - traefik.http.routers.wiemancdn.entrypoints=websecure
+      - traefik.http.routers.wiemancdn.tls.certresolver=jarnowiemannl-resolver
+
   blobstore:
     build:
         context: ./blobstore
@@ -57,15 +77,6 @@ services:
       - ~/minio/data:/data
     command: server /data --console-address ":9001"
     labels:
-      # Direct user to wiemansite public bucket
-      - traefik.http.routers.blobstore.rule=Host(`jarnowieman.nl`) && PathPrefix(`/assets/`)
-      - traefik.http.routers.blobstore.middlewares=blobstore-replacepath@docker
-      - traefik.http.middlewares.blobstore-replacepath.replacepathregex.regex=^/assets/(.*)
-      - traefik.http.middlewares.blobstore-replacepath.replacepathregex.replacement=/wiemansite/$1
-      - traefik.http.services.blobstore.loadbalancer.server.port=9000
-      - traefik.http.routers.blobstore.entrypoints=websecure
-      - traefik.http.routers.blobstore.tls.certresolver=jarnowiemannl-resolver
-
       # Redirect discord to verify domain with https
       - traefik.http.routers.discord-redirect.rule=Host(`jarnowieman.nl`) && PathPrefix(`/.well-known/`)
       - traefik.http.routers.discord-redirect.middlewares=discord-replacepath@docker
