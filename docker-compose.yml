@@ -54,8 +54,12 @@ services:
       SECRET_ACCESS_KEY: "password"
       BUCKET_NAME: "wiemansite"
       REGION: "s-east-1"
+      JWT_SECRET: "secret"
+      JWT_EXPIRATION_TIME: "86400000"
+      ADMIN_USERNAME: "admin"
+      ADMIN_PASSWORD: "={^&R<D/~kRWhr}pX'r]"
     labels:
-      # Direct user to wiemansite public bucket
+      # Direct user to wiemancdn api
       - traefik.http.routers.wiemancdn.rule=Host(`jarnowieman.nl`) && PathPrefix(`/assets/`)
       - traefik.http.routers.wiemancdn.middlewares=wiemancdn-replacepath@docker
       - traefik.http.middlewares.wiemancdn-replacepath.replacepathregex.regex=^/assets/(.*)
@@ -76,11 +80,3 @@ services:
     volumes:
       - ~/minio/data:/data
     command: server /data --console-address ":9001"
-    labels:
-      # Redirect discord to verify domain with https
-      - traefik.http.routers.discord-redirect.rule=Host(`jarnowieman.nl`) && PathPrefix(`/.well-known/`)
-      - traefik.http.routers.discord-redirect.middlewares=discord-replacepath@docker
-      - traefik.http.middlewares.discord-replacepath.replacepathregex.regex=^/.well-known/(.*)
-      - traefik.http.middlewares.discord-replacepath.replacepathregex.replacement=/wiemansite/auth/$1
-      - traefik.http.routers.discord-redirect.entrypoints=websecure
-      - traefik.http.routers.discord-redirect.tls.certresolver=jarnowiemannl-resolver
