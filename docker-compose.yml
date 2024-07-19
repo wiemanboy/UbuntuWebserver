@@ -28,6 +28,15 @@ services:
       - --log.maxage=7
       - --accesslog=true
       - --accesslog.filepath=/logs/access.log
+      - --metrics.otlp.http.endpoint=http://localhost:4318/v1/metrics
+
+      # Metrics
+      - --metrics.otlp=true
+      - --metrics.otlp=true
+      - --metrics.otlp.addRoutersLabels=true
+      - --metrics.otlp.addServicesLabels=true
+      - --metrics.otlp.pushInterval=10s
+      - --metrics.otlp.http=true
     ports:
       - "80:80"
       - "443:443"
@@ -36,6 +45,12 @@ services:
       - ./reverse-proxy-logs:/logs
       - ./letsencrypt:/letsencrypt
       - /var/run/docker.sock:/var/run/docker.sock
+
+  otel-collector:
+    image: otel/opentelemetry-collector
+    ports:
+      - "4318:4318"
+      - "55679:55679"
 
   wiemansite:
     image: wiemanboy/wiemansite
