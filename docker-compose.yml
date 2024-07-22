@@ -63,9 +63,13 @@ services:
   wiemansite:
     image: wiemanboy/wiemansite
     labels:
-      - traefik.http.routers.WiemanSite.rule=Host(`jarnowieman.nl`)
-      - traefik.http.routers.WiemanSite.entrypoints=websecure
-      - traefik.http.routers.WiemanSite.tls.certresolver=jarnowiemannl-resolver
+      - traefik.http.routers.wiemansite.rule=Host(`jarnowieman.nl`)
+      - traefik.http.routers.wiemansite.entrypoints=websecure
+      - traefik.http.routers.wiemansite.tls.certresolver=jarnowiemannl-resolver
+
+      - traefik.http.routers.wiemansitewww.rule=Host(`www.jarnowieman.nl`)
+      - traefik.http.routers.wiemansitewww.entrypoints=websecure
+      - traefik.http.routers.wiemansitewww.tls.certresolver=jarnowiemannl-resolver
 
   wiemancdn:
     image: wiemanboy/wiemancdn
