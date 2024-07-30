@@ -38,7 +38,7 @@ services:
       - --entryPoints.metrics.address=:8082
       - --metrics.prometheus.entryPoint=metrics
     labels:
-      - traefik.http.routers.dashboard.rule=Host(`server.jarnowieman.nl`)
+      - traefik.http.routers.dashboard.rule=Host(`dev.jarnowieman.nl`)
       - traefik.http.routers.dashboard.service=api@internal
       - traefik.http.routers.dashboard.middlewares=auth
       - traefik.http.routers.dashboard.entrypoints=websecure
@@ -65,11 +65,13 @@ services:
 
   grafana:
     image: grafana/grafana
-    ports:
-      - "3000:3000"
     environment:
       - GF_SECURITY_ADMIN_USER=admin
       - GF_SECURITY_ADMIN_PASSWORD=admin
+    labels:
+      - traefik.http.routers.grafana.rule=Host(`server.jarnowieman.nl`)
+      - traefik.http.routers.grafana.entrypoints=websecure
+      - traefik.http.routers.grafana.tls.certresolver=jarnowiemannl-resolver
     volumes:
       - ./grafana-storage:/var/lib/grafana
 
@@ -90,8 +92,8 @@ services:
       - blobstore_secret_key
     environment:
       S3_ENDPOINT: "http://blobstore:9000"
-      ACCESS_KEY_ID: blobstore_access_key
-      SECRET_ACCESS_KEY: blobstore_secret_key
+      ACCESS_KEY_ID_FILE: /run/secrets/blobstore_access_key
+      SECRET_ACCESS_KEY_FILE: /run/secrets/blobstore_secret_key
       BUCKET_NAME: "wiemansite"
       REGION: "s-east-1"
       JWT_SECRET_FILE: /run/secrets/wieman_images_jwt_secret
@@ -119,8 +121,10 @@ services:
     environment:
       MINIO_ROOT_USER_FILE: /run/secrets/blobstore_access_key
       MINIO_ROOT_PASSWORD_FILE: /run/secrets/blobstore_secret_key
-    ports:
-      - "9001:9001"
+    labels:
+      - traefik.http.routers.blobstore.rule=Host(`storage.jarnowieman.nl`)
+      - traefik.http.routers.blobstore.entrypoints=websecure
+      - traefik.http.routers.blobstore.tls.certresolver=jarnowiemannl-resolver
     volumes:
       - ~/minio/data:/data
     command: server /data --console-address ":9001"
