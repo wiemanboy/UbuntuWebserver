@@ -1,9 +1,10 @@
 services:
   reverse-proxy:
     image: traefik
+    secrets:
+      - traefik_users
     command:
       # Dashboard
-      - --api.insecure=true
       - --api.dashboard=true
 
       # Providers
@@ -36,6 +37,13 @@ services:
       - --metrics.prometheus.addServicesLabels=true
       - --entryPoints.metrics.address=:8082
       - --metrics.prometheus.entryPoint=metrics
+    labels:
+      - traefik.http.routers.dashboard.rule=Host(`server.jarnowieman.nl`)
+      - traefik.http.routers.dashboard.service=api@internal
+      - traefik.http.routers.dashboard.middlewares=auth
+      - traefik.http.routers.dashboard.entrypoints=websecure
+      - traefik.http.routers.dashboard.tls.certresolver=jarnowiemannl-resolver
+      - traefik.http.middlewares.auth.basicauth.usersfile=/run/secrets/traefik_users
     ports:
       - "80:80"
       - "443:443"
@@ -118,6 +126,8 @@ services:
     command: server /data --console-address ":9001"
 
 secrets:
+  traefik_users:
+    external: true
   wieman_images_jwt_secret:
     external: true
   wieman_images_admin_password:

@@ -27,6 +27,7 @@ that can be used to store the images that need to be built as this cannot be don
 After the registry is up and running, build and push the images as needed:
 
 ```bash
+sudo docker build -t localhost:5000/grafana ./grafana && sudo docker push localhost:5000/grafana
 sudo docker build -t localhost:5000/blobstore ./blobstore && sudo docker push localhost:5000/blobstore
 ```
 
