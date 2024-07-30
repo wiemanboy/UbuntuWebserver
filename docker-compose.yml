@@ -74,16 +74,22 @@ services:
 
   wiemanimages:
     image: wiemanboy/wiemanimages
+    secrets:
+      - wieman_images_jwt_secret
+      - wieman_images_admin_password
+      - wieman_images_admin_username
+      - blobstore_access_key
+      - blobstore_secret_key
     environment:
       S3_ENDPOINT: "http://blobstore:9000"
-      ACCESS_KEY_ID: "username"
-      SECRET_ACCESS_KEY: "password"
+      ACCESS_KEY_ID: blobstore_access_key
+      SECRET_ACCESS_KEY: blobstore_secret_key
       BUCKET_NAME: "wiemansite"
       REGION: "s-east-1"
-      JWT_SECRET: "S5^cv'SP3%OQ&hi(%za"
+      JWT_SECRET_FILE: /run/secrets/wieman_images_jwt_secret
       JWT_EXPIRATION_TIME: "86400000"
-      ADMIN_USERNAME: "admin"
-      ADMIN_PASSWORD: "={^&R<D/~kRWhr}pX'r]"
+      ADMIN_USERNAME_FILE: /run/secrets/wieman_images_admin_username
+      ADMIN_PASSWORD_FILE: /run/secrets/wieman_images_admin_password
     labels:
       # Direct user to wiemanimages api
       - traefik.http.routers.api-redirect.rule=Host(`jarnowieman.nl`) && PathPrefix(`/api/`)
@@ -99,11 +105,26 @@ services:
 
   blobstore:
     image: localhost:5000/blobstore
+    secrets:
+      - blobstore_access_key
+      - blobstore_secret_key
     environment:
-      MINIO_ROOT_USER: "username"
-      MINIO_ROOT_PASSWORD: "password"
+      MINIO_ROOT_USER_FILE: /run/secrets/blobstore_access_key
+      MINIO_ROOT_PASSWORD_FILE: /run/secrets/blobstore_secret_key
     ports:
       - "9001:9001"
     volumes:
       - ~/minio/data:/data
     command: server /data --console-address ":9001"
+
+secrets:
+  wieman_images_jwt_secret:
+    external: true
+  wieman_images_admin_password:
+    external: true
+  wieman_images_admin_username:
+    external: true
+  blobstore_access_key:
+    external: true
+  blobstore_secret_key:
+    external: true
