@@ -38,7 +38,7 @@ services:
       - --entryPoints.metrics.address=:8082
       - --metrics.prometheus.entryPoint=metrics
     labels:
-      - traefik.http.routers.dashboard.rule=Host(`dev.jarnowieman.nl`)
+      - traefik.http.routers.dashboard.rule=Host(`traefik.jarnowieman.nl`)
       - traefik.http.routers.dashboard.service=api@internal
       - traefik.http.routers.dashboard.middlewares=auth
       - traefik.http.routers.dashboard.entrypoints=websecure
@@ -68,7 +68,7 @@ services:
       - GF_SECURITY_ADMIN_USER=admin
       - GF_SECURITY_ADMIN_PASSWORD=admin
     labels:
-      - traefik.http.routers.grafana.rule=Host(`server.jarnowieman.nl`)
+      - traefik.http.routers.grafana.rule=Host(`grafana.jarnowieman.nl`)
       - traefik.http.routers.grafana.entrypoints=websecure
       - traefik.http.routers.grafana.tls.certresolver=jarnowiemannl-resolver
     volumes:
@@ -121,7 +121,8 @@ services:
       MINIO_ROOT_USER_FILE: /run/secrets/blobstore_access_key
       MINIO_ROOT_PASSWORD_FILE: /run/secrets/blobstore_secret_key
     labels:
-      - traefik.http.routers.blobstore.rule=Host(`storage.jarnowieman.nl`)
+      - traefik.http.routers.blobstore.rule=Host(`minio.jarnowieman.nl`)
+      - traefik.http.services.blobstore.loadbalancer.server.port=9001
       - traefik.http.routers.blobstore.entrypoints=websecure
       - traefik.http.routers.blobstore.tls.certresolver=jarnowiemannl-resolver
     volumes:
