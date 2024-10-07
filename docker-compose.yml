@@ -81,6 +81,10 @@ services:
       - traefik.http.routers.WiemanSite.entrypoints=websecure
       - traefik.http.routers.WiemanSite.tls.certresolver=jarnowiemannl-resolver
 
+      - traefik.http.routers.wiemansite-www.rule=Host(`www.jarnowieman.nl`)
+      - traefik.http.routers.wiemansite-www.entrypoints=websecure
+      - traefik.http.routers.wiemansite-www.tls.certresolver=jarnowiemannl-resolver
+
   wiemanimages:
     image: wiemanboy/wiemanimages
     secrets:
