@@ -88,24 +88,24 @@ services:
   wiemanimages:
     image: wiemanboy/wiemanimages
     secrets:
-      - wieman_images_jwt_secret
-      - wieman_images_admin_password
-      - wieman_images_admin_username
       - blobstore_access_key
       - blobstore_secret_key
+      - auth0_domain
+      - auth0_client_id
+      - auth0_client_secret
     environment:
       S3_ENDPOINT: "http://blobstore:9000"
       ACCESS_KEY_ID_FILE: /run/secrets/blobstore_access_key
       SECRET_ACCESS_KEY_FILE: /run/secrets/blobstore_secret_key
       BUCKET_NAME: "wiemansite"
       REGION: "s-east-1"
-      JWT_SECRET_FILE: /run/secrets/wieman_images_jwt_secret
-      JWT_EXPIRATION_TIME: "86400000"
-      ADMIN_USERNAME_FILE: /run/secrets/wieman_images_admin_username
-      ADMIN_PASSWORD_FILE: /run/secrets/wieman_images_admin_password
+      AUTH0_DOMAIN_FILE: /run/secrets/auth0_domain
+      AUTH0_CLIENT_ID_FILE: /run/secrets/auth0_client_id
+      AUTH0_CLIENT_SECRET_FILE: /run/secrets/auth0_client_secret
+      AUTH0_CALLBACK_URL: "https://jarnowieman.nl/services/files/auth/callback"
     labels:
       # Direct user to wiemanimages api
-      - traefik.http.routers.api-redirect.rule=Host(`jarnowieman.nl`) && PathPrefix(`/api/`)
+      - traefik.http.routers.api-redirect.rule=Host(`jarnowieman.nl`) && PathRegexp(`/((api|services)/files/).*`)
       - traefik.http.routers.api-redirect.entrypoints=websecure
       - traefik.http.routers.api-redirect.tls.certresolver=jarnowiemannl-resolver
 
@@ -138,14 +138,22 @@ services:
     secrets:
       - doc_store_root_username
       - doc_store_root_password
+      - auth0_domain
+      - auth0_client_id
+      - auth0_client_secret
     environment:
       MONGO_USER_FILE: /run/secrets/doc_store_root_username
       MONGO_PASSWORD_FILE: /run/secrets/doc_store_root_password
       MONGO_DB: profile_db
       MONGO_HOST: doc-store
       MONGO_PORT: 27017
+      AUTH0_DOMAIN_FILE: /run/secrets/auth0_domain
+      AUTH0_CLIENT_ID_FILE: /run/secrets/auth0_client_id
+      AUTH0_CLIENT_SECRET_FILE: /run/secrets/auth0_client_secret
+      AUTH0_AUDIENCE: "https://jarnowieman.nl/api/profiles/"
+      SPRING_PROFILES_ACTIVE: prod
     labels:
-      - traefik.http.routers.wiemanapi.rule=Host(`jarnowieman.nl`) && PathPrefix(`/api/profiles/`)
+      - traefik.http.routers.wiemanapi.rule=Host(`jarnowieman.nl`) && (PathRegexp(`/((api|services)/profiles/).*`) || PathRegexp(`.*/okta.*`))
       - traefik.http.routers.wiemanapi.entrypoints=websecure
       - traefik.http.routers.wiemanapi.tls.certresolver=jarnowiemannl-resolver
 
@@ -166,12 +174,6 @@ services:
 secrets:
   traefik_users:
     external: true
-  wieman_images_jwt_secret:
-    external: true
-  wieman_images_admin_password:
-    external: true
-  wieman_images_admin_username:
-    external: true
   blobstore_access_key:
     external: true
   blobstore_secret_key:
@@ -179,4 +181,10 @@ secrets:
   doc_store_root_username:
     external: true
   doc_store_root_password:
+    external: true
+  auth0_domain:
+    external: true
+  auth0_client_id:
+    external: true
+  auth0_client_secret:
     external: true
