@@ -76,6 +76,9 @@ services:
 
   wiemansite:
     image: wiemanboy/wiemansite
+    environment:
+      PUBLIC_API_BASE_URL: "https://jarnowieman.nl/api"
+      PUBLIC_IMAGE_BASE_URL: "https://jarnowieman.nl/assets"
     labels:
       - traefik.http.routers.WiemanSite.rule=Host(`jarnowieman.nl`)
       - traefik.http.routers.WiemanSite.entrypoints=websecure
