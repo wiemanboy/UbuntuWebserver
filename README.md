@@ -17,7 +17,7 @@ This repo describes and helps build my webserver.
 
 ## Building
 
-This repo includes a [docker compose](docker-compose.yml) that can be used
+This repo includes multiple docker-compose files that can be used
 to start up the different services in swarm mode,
 to do so run:
 
@@ -52,5 +52,5 @@ sudo docker secret create traefik_password passwordfile
 
 Now that everything is set up, we can deploy the stack:
 ```bash
-sudo docker stack deploy --compose-file docker-compose.yml server
+sudo docker stack deploy -c docker-compose.reverse-proxy.yml -c docker-compose.wiemansite.yml server
 ```
