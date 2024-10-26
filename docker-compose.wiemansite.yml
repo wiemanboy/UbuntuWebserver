@@ -2,7 +2,6 @@ services:
   wiemansite:
     image: wiemanboy/wiemansite
     networks:
-      - wiemansite_network
       - reverse_proxy_network
     environment:
       PUBLIC_API_BASE_URL: "https://jarnowieman.nl/api"
@@ -116,8 +115,6 @@ services:
 
 networks:
   reverse_proxy_network:
-    external: true
-  wiemansite_network:
     external: true
   wiemanapi_network:
   wiemanimages_network:

@@ -2,7 +2,6 @@ services:
   reverse-proxy:
     image: traefik
     networks:
-      - wiemansite_network
       - reverse_proxy_network
     secrets:
       - traefik_users
@@ -82,8 +81,6 @@ services:
       - ./grafana-storage:/var/lib/grafana
 
 networks:
-  wiemansite_network:
-    external: true
   reverse_proxy_network:
     external: true
 
