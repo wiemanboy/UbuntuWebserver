@@ -1,0 +1,91 @@
+services:
+  reverse-proxy:
+    image: traefik
+    networks:
+      - reverse_proxy_network
+    secrets:
+      - traefik_users
+    command:
+      # Dashboard
+      - --api.dashboard=true
+
+      # Providers
+      - --providers.docker
+      - --providers.docker.exposedbydefault=false
+
+      # Entrypoints
+      - --entrypoints.web.address=:80
+      - --entrypoints.websecure.address=:443
+      - --entrypoints.web.http.redirections.entryPoint.to=websecure
+      - --entrypoints.web.http.redirections.entryPoint.scheme=https
+      - --entrypoints.web.http.redirections.entrypoint.permanent=true
+
+      # Let's Encrypt certificate resolver
+      - --certificatesresolvers.jarnowiemannl-resolver.acme.tlschallenge=true
+      - --certificatesresolvers.jarnowiemannl-resolver.acme.email=wiemanboy@gmail.com
+      - --certificatesresolvers.jarnowiemannl-resolver.acme.storage=/letsencrypt/jarnowiemannl.json
+
+      # Logs
+      - --log.level=INFO
+      - --log.filePath=/logs/traefik.log
+      - --log.maxage=7
+      - --accesslog=true
+      - --accesslog.filepath=/logs/access.log
+
+      # Metrics
+      - --metrics.prometheus=true
+      - --metrics.prometheus.addEntryPointsLabels=true
+      - --metrics.prometheus.addrouterslabels=true
+      - --metrics.prometheus.addServicesLabels=true
+      - --entryPoints.metrics.address=:8082
+      - --metrics.prometheus.entryPoint=metrics
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.dashboard.rule=Host(`traefik.jarnowieman.nl`)
+      - traefik.http.routers.dashboard.service=api@internal
+      - traefik.http.routers.dashboard.middlewares=auth
+      - traefik.http.routers.dashboard.entrypoints=websecure
+      - traefik.http.routers.dashboard.tls.certresolver=jarnowiemannl-resolver
+      - traefik.http.middlewares.auth.basicauth.usersfile=/run/secrets/traefik_users
+    ports:
+      - "80:80"
+      - "443:443"
+      - "8082:8082"
+    volumes:
+      - ./reverse-proxy-logs:/logs
+      - ./letsencrypt:/letsencrypt
+      - /var/run/docker.sock:/var/run/docker.sock
+
+  prometheus:
+    image: prom/prometheus
+    networks:
+      - reverse_proxy_network
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+    command:
+      - --config.file=/etc/prometheus/prometheus.yml
+    ports:
+      - "9090:9090"
+
+  grafana:
+    image: grafana/grafana
+    networks:
+      - reverse_proxy_network
+    environment:
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.grafana.rule=Host(`grafana.jarnowieman.nl`)
+      - traefik.http.routers.grafana.entrypoints=websecure
+      - traefik.http.routers.grafana.tls.certresolver=jarnowiemannl-resolver
+    volumes:
+      - ./grafana-storage:/var/lib/grafana
+
+networks:
+  reverse_proxy_network:
+    external: true
+
+secrets:
+  traefik_users:
+    external: true

@@ -1,85 +1,14 @@
 services:
-  reverse-proxy:
-    image: traefik
-    secrets:
-      - traefik_users
-    command:
-      # Dashboard
-      - --api.dashboard=true
-
-      # Providers
-      - --providers.docker
-      - --providers.docker.exposedbydefault=true
-
-      # Entrypoints
-      - --entrypoints.web.address=:80
-      - --entrypoints.websecure.address=:443
-      - --entrypoints.web.http.redirections.entryPoint.to=websecure
-      - --entrypoints.web.http.redirections.entryPoint.scheme=https
-      - --entrypoints.web.http.redirections.entrypoint.permanent=true
-
-      # Let's Encrypt certificate resolver
-      - --certificatesresolvers.jarnowiemannl-resolver.acme.tlschallenge=true
-      - --certificatesresolvers.jarnowiemannl-resolver.acme.email=wiemanboy@gmail.com
-      - --certificatesresolvers.jarnowiemannl-resolver.acme.storage=/letsencrypt/jarnowiemannl.json
-
-      # Logs
-      - --log.level=INFO
-      - --log.filePath=/logs/traefik.log
-      - --log.maxage=7
-      - --accesslog=true
-      - --accesslog.filepath=/logs/access.log
-
-      # Metrics
-      - --metrics.prometheus=true
-      - --metrics.prometheus.addEntryPointsLabels=true
-      - --metrics.prometheus.addrouterslabels=true
-      - --metrics.prometheus.addServicesLabels=true
-      - --entryPoints.metrics.address=:8082
-      - --metrics.prometheus.entryPoint=metrics
-    labels:
-      - traefik.http.routers.dashboard.rule=Host(`traefik.jarnowieman.nl`)
-      - traefik.http.routers.dashboard.service=api@internal
-      - traefik.http.routers.dashboard.middlewares=auth
-      - traefik.http.routers.dashboard.entrypoints=websecure
-      - traefik.http.routers.dashboard.tls.certresolver=jarnowiemannl-resolver
-      - traefik.http.middlewares.auth.basicauth.usersfile=/run/secrets/traefik_users
-    ports:
-      - "80:80"
-      - "443:443"
-      - "8082:8082"
-    volumes:
-      - ./reverse-proxy-logs:/logs
-      - ./letsencrypt:/letsencrypt
-      - /var/run/docker.sock:/var/run/docker.sock
-
-  prometheus:
-    image: prom/prometheus
-    volumes:
-      - ./prometheus.yml:/etc/prometheus/prometheus.yml
-    command:
-      - --config.file=/etc/prometheus/prometheus.yml
-    ports:
-      - "9090:9090"
-
-  grafana:
-    image: grafana/grafana
-    environment:
-      - GF_SECURITY_ADMIN_USER=admin
-      - GF_SECURITY_ADMIN_PASSWORD=admin
-    labels:
-      - traefik.http.routers.grafana.rule=Host(`grafana.jarnowieman.nl`)
-      - traefik.http.routers.grafana.entrypoints=websecure
-      - traefik.http.routers.grafana.tls.certresolver=jarnowiemannl-resolver
-    volumes:
-      - ./grafana-storage:/var/lib/grafana
-
   wiemansite:
     image: wiemanboy/wiemansite
+    networks:
+      - reverse_proxy_network
     environment:
       PUBLIC_API_BASE_URL: "https://jarnowieman.nl/api"
       PUBLIC_IMAGE_BASE_URL: "https://jarnowieman.nl/assets"
     labels:
+      - traefik.enable=true
+
       - traefik.http.routers.WiemanSite.rule=Host(`jarnowieman.nl`)
       - traefik.http.routers.WiemanSite.entrypoints=websecure
       - traefik.http.routers.WiemanSite.tls.certresolver=jarnowiemannl-resolver
@@ -88,8 +17,12 @@ services:
       - traefik.http.routers.wiemansite-www.entrypoints=websecure
       - traefik.http.routers.wiemansite-www.tls.certresolver=jarnowiemannl-resolver
 
+
   wiemanimages:
     image: wiemanboy/wiemanimages
+    networks:
+      - wiemanimages_network
+      - reverse_proxy_network
     secrets:
       - blobstore_access_key
       - blobstore_secret_key
@@ -107,11 +40,13 @@ services:
       AUTH0_CLIENT_SECRET_FILE: /run/secrets/auth0_client_secret
       AUTH0_CALLBACK_URL: "https://jarnowieman.nl/services/files/auth/callback"
     labels:
+      - traefik.enable=true
       # Direct user to wiemanimages api
       - traefik.http.routers.api-redirect.rule=Host(`jarnowieman.nl`) && PathRegexp(`/((api|services)/files/).*`)
       - traefik.http.routers.api-redirect.entrypoints=websecure
       - traefik.http.routers.api-redirect.tls.certresolver=jarnowiemannl-resolver
 
+        # Redirect to /assets/
       - traefik.http.routers.wiemanimages.rule=Host(`jarnowieman.nl`) && PathPrefix(`/assets/`)
       - traefik.http.routers.wiemanimages.middlewares=wiemanimages-replacepath@docker
       - traefik.http.middlewares.wiemanimages-replacepath.replacepathregex.regex=^/assets/(.*)
@@ -121,6 +56,9 @@ services:
 
   blobstore:
     image: localhost:5000/blobstore
+    networks:
+      - wiemanapi_network
+      - reverse_proxy_network
     secrets:
       - blobstore_access_key
       - blobstore_secret_key
@@ -128,6 +66,7 @@ services:
       MINIO_ROOT_USER_FILE: /run/secrets/blobstore_access_key
       MINIO_ROOT_PASSWORD_FILE: /run/secrets/blobstore_secret_key
     labels:
+      - traefik.enable=true
       - traefik.http.routers.blobstore.rule=Host(`minio.jarnowieman.nl`)
       - traefik.http.services.blobstore.loadbalancer.server.port=9001
       - traefik.http.routers.blobstore.entrypoints=websecure
@@ -138,6 +77,9 @@ services:
 
   wiemanapi:
     image: wiemanboy/wiemanapi
+    networks:
+      - wiemanapi_network
+      - reverse_proxy_network
     secrets:
       - doc_store_root_username
       - doc_store_root_password
@@ -156,12 +98,15 @@ services:
       AUTH0_AUDIENCE: "https://jarnowieman.nl/api/profiles/"
       SPRING_PROFILES_ACTIVE: prod
     labels:
+      - traefik.enable=true
       - traefik.http.routers.wiemanapi.rule=Host(`jarnowieman.nl`) && (PathRegexp(`/((api|services)/profiles/).*`) || PathRegexp(`.*/okta.*`))
       - traefik.http.routers.wiemanapi.entrypoints=websecure
       - traefik.http.routers.wiemanapi.tls.certresolver=jarnowiemannl-resolver
 
   doc-store:
     image: mongo:4
+    networks:
+      - wiemanapi_network
     secrets:
       - doc_store_root_username
       - doc_store_root_password
@@ -174,9 +119,13 @@ services:
     ports:
       - "27017:27017"
 
-secrets:
-  traefik_users:
+networks:
+  reverse_proxy_network:
     external: true
+  wiemanapi_network:
+  wiemanimages_network:
+
+secrets:
   blobstore_access_key:
     external: true
   blobstore_secret_key:
