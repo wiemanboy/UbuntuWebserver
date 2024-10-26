@@ -1,0 +1,31 @@
+services:
+  satisfactory-server:
+    image: 'wolveix/satisfactory-server:latest'
+    networks:
+      - reverse_proxy_network
+    ports:
+      - ':7777/udp'
+      - ':7777/tcp'
+    volumes:
+      - './data/satisfactory-server:/config'
+    environment:
+      - MAXPLAYERS=8
+      - PGID=1000
+      - PUID=1000
+      - ROOTLESS=false
+      - STEAMBETA=false
+    deploy:
+      resources:
+        limits:
+          memory: 16G
+        reservations:
+          memory: 4G
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.satisfactory-server.rule=Host(`dev.jarnowieman.nl`)
+      - traefik.http.routers.satisfactory-server.entrypoints=websecure
+      - traefik.http.routers.satisfactory-server.tls.certresolver=jarnowiemannl-resolver
+
+networks:
+  reverse_proxy_network:
+    external: true
