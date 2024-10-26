@@ -7,6 +7,8 @@ services:
       PUBLIC_API_BASE_URL: "https://jarnowieman.nl/api"
       PUBLIC_IMAGE_BASE_URL: "https://jarnowieman.nl/assets"
     labels:
+      - traefik.enable=true
+
       - traefik.http.routers.WiemanSite.rule=Host(`jarnowieman.nl`)
       - traefik.http.routers.WiemanSite.entrypoints=websecure
       - traefik.http.routers.WiemanSite.tls.certresolver=jarnowiemannl-resolver
@@ -38,11 +40,13 @@ services:
       AUTH0_CLIENT_SECRET_FILE: /run/secrets/auth0_client_secret
       AUTH0_CALLBACK_URL: "https://jarnowieman.nl/services/files/auth/callback"
     labels:
+      - traefik.enable=true
       # Direct user to wiemanimages api
       - traefik.http.routers.api-redirect.rule=Host(`jarnowieman.nl`) && PathRegexp(`/((api|services)/files/).*`)
       - traefik.http.routers.api-redirect.entrypoints=websecure
       - traefik.http.routers.api-redirect.tls.certresolver=jarnowiemannl-resolver
 
+        # Redirect to /assets/
       - traefik.http.routers.wiemanimages.rule=Host(`jarnowieman.nl`) && PathPrefix(`/assets/`)
       - traefik.http.routers.wiemanimages.middlewares=wiemanimages-replacepath@docker
       - traefik.http.middlewares.wiemanimages-replacepath.replacepathregex.regex=^/assets/(.*)
@@ -62,6 +66,7 @@ services:
       MINIO_ROOT_USER_FILE: /run/secrets/blobstore_access_key
       MINIO_ROOT_PASSWORD_FILE: /run/secrets/blobstore_secret_key
     labels:
+      - traefik.enable=true
       - traefik.http.routers.blobstore.rule=Host(`minio.jarnowieman.nl`)
       - traefik.http.services.blobstore.loadbalancer.server.port=9001
       - traefik.http.routers.blobstore.entrypoints=websecure
@@ -93,6 +98,7 @@ services:
       AUTH0_AUDIENCE: "https://jarnowieman.nl/api/profiles/"
       SPRING_PROFILES_ACTIVE: prod
     labels:
+      - traefik.enable=true
       - traefik.http.routers.wiemanapi.rule=Host(`jarnowieman.nl`) && (PathRegexp(`/((api|services)/profiles/).*`) || PathRegexp(`.*/okta.*`))
       - traefik.http.routers.wiemanapi.entrypoints=websecure
       - traefik.http.routers.wiemanapi.tls.certresolver=jarnowiemannl-resolver

@@ -11,7 +11,7 @@ services:
 
       # Providers
       - --providers.docker
-      - --providers.docker.exposedbydefault=true
+      - --providers.docker.exposedbydefault=false
 
       # Entrypoints
       - --entrypoints.web.address=:80
@@ -40,6 +40,7 @@ services:
       - --entryPoints.metrics.address=:8082
       - --metrics.prometheus.entryPoint=metrics
     labels:
+      - traefik.enable=true
       - traefik.http.routers.dashboard.rule=Host(`traefik.jarnowieman.nl`)
       - traefik.http.routers.dashboard.service=api@internal
       - traefik.http.routers.dashboard.middlewares=auth
@@ -74,6 +75,7 @@ services:
       - GF_SECURITY_ADMIN_USER=admin
       - GF_SECURITY_ADMIN_PASSWORD=admin
     labels:
+      - traefik.enable=true
       - traefik.http.routers.grafana.rule=Host(`grafana.jarnowieman.nl`)
       - traefik.http.routers.grafana.entrypoints=websecure
       - traefik.http.routers.grafana.tls.certresolver=jarnowiemannl-resolver
