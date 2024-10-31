@@ -1,11 +1,15 @@
 #!/bin/sh
 
-for var in $(env); do
-  if echo "$var" | grep -q '_FILE='; then
-    var_name=$(echo "$var" | cut -d'=' -f1 | sed 's/_FILE$//')
-    file_path=$(echo "$var" | cut -d'=' -f2)
+echo "Read secrets"
+
+for environment_variable in $(env); do
+  if [ "${environment_variable#*_FILE=}" != "$environment_variable" ]; then
+    variable_name="${environment_variable%%=*}"
+    variable_name="${variable_name%_FILE}"
+    file_path="${environment_variable#*=}"
     if [ -f "$file_path" ]; then
-      export "$var_name"="$(cat "$file_path")"
+      echo $variable_name
+      export "$variable_name"="$(cat "$file_path")"
     fi
   fi
 done
