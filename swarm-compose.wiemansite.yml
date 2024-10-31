@@ -72,7 +72,7 @@ services:
       - traefik.http.routers.blobstore.entrypoints=websecure
       - traefik.http.routers.blobstore.tls.certresolver=jarnowiemannl-resolver
     volumes:
-      - ~/minio/data:/data
+      - ./data/minio:/data
     command: server /data --console-address ":9001"
 
   wiemanapi:
@@ -115,7 +115,7 @@ services:
       MONGO_INITDB_ROOT_PASSWORD_FILE: /run/secrets/doc_store_root_username
       MONGO_INITDB_DATABASE: profile_db
     volumes:
-      - ./mongo/data:/data/db
+      - ./data/mongo:/data/db
     ports:
       - "27017:27017"
 

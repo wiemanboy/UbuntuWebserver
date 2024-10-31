@@ -13,13 +13,11 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
-      - name: multiple command
-        uses: appleboy/ssh-action@v1.1.0
-        with:
-          host: ${{ secrets.HOST }}
-          username: ${{ secrets.USERNAME }}
-          key: ${{ secrets.PRIVATE_KEY }}
-          script: |
-            rsync -avz --exclude 'data' ./ ~/server
+      - name: Deploy
+        run: |
+          echo "${{ secrets.PRIVATE_KEY }}" > private_key && chmod 600 private_key
+          rsync -av --exclude='data/' --exclude='.*' -e "ssh -o StrictHostKeyChecking=no -i private_key" ./ ${{ secrets.USERNAME }}@${{ secrets.HOST }}:~/server
+          ssh -o StrictHostKeyChecking=no -i private_key ${{secrets.USERNAME}}@${{secrets.HOST}} '
             cd ~/server
             make deploy
+          '
