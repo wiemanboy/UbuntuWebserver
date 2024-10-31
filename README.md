@@ -6,51 +6,78 @@ This repo describes and helps build my webserver.
 
 - ubuntu (although other linux distributions should work)
 
+
 - docker
-- apache-2-utils
+- apache22-utils
+
 
 - static ip
 - port forwarded port 80
 - port forwarded port 443
-- domain name specified in the compose file
+- domain name specified in the swarm files
 - DNS records pointing to the static ip
 
 ## Building
 
-This repo includes multiple docker-compose files that can be used
-to start up the different services in swarm mode,
-to do so run:
+This repo includes multiple swarm-compose files that can be used
+to start up the different services in swarm mode.
 
-```bash
-sudo docker compose -f registry-compose.yml up -d
-```
-This will initialize a local registry
-that can be used to store the images that need to be built as this cannot be done in the swarm mode.
+### Environment
 
-After the registry is up and running, build and push the images as needed:
+Before starting, make sure that all secrets defined in the swarm files are created.
 
-```bash
-sudo docker build -t localhost:5000/grafana ./grafana && sudo docker push localhost:5000/grafana
-sudo docker build -t localhost:5000/blobstore ./blobstore && sudo docker push localhost:5000/blobstore
-```
-
-After the images are built and pushed, the stack can be initialized:
-```bash
-sudo docker stack init server
-```
-
-Make sure to add any secrets that are needed:
 ```bash
 printf "value" | sudo docker secret create secret_name -
 ```
 
-traefik password needs to be generated:
+The traefik password needs to be generated:
 ```bash
 htpasswd -c -s passwordfile admin
 sudo docker secret create traefik_password passwordfile 
 ```
 
+### Auto setup
+
+The server can be setup by running the following command:
+
+```bash
+make setup
+```
+
+### Manual setup
+First, to set up the registry, this will be used to build local images like databases.
+
+```bash
+make build:registry
+```
+
+After the registry is set up, the images can be built and pushed:
+```bash
+make build:images
+```
+
+This will run all dockerfiles in the `setup` directory and push them to the registry.
+
+Next, the network can be set up:
+
+```bash
+make setup:network
+```
+
+After the images are built and pushed, the stack can be initialized:
+```bash
+make build:stack
+```
+
 Now that everything is set up, we can deploy the stack:
 ```bash
-sudo docker stack deploy -c docker-compose.reverse-proxy.yml -c docker-compose.wiemansite.yml server
+make deploy
+```
+
+## Services
+
+Services can be updated using the following command:
+
+```bash
+make update service=service_name image=image_name version=version
 ```
