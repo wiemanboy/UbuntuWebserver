@@ -1,6 +1,10 @@
-.PHONY: setup setup\:network setup\:images build\:registry build\:stack deploy update update\:all
+.PHONY: setup setup\:network setup\:images build\:registry build\:swarm deploy update update\:all
 
-setup: build\:registry setup\:images setup\:network build\:stack deploy
+setup: build\:registry setup\:images build\:swarm setup\:network deploy
+
+setup\:dependencies:
+	sudo apt-get update && sudo apt-get install -y \
+		apache2-utils \
 
 setup\:images:
 	for dir in ./setup/*; do \
@@ -16,8 +20,8 @@ setup\:network:
 build\:registry:
 	sudo docker compose -f registry-compose.yml up -d
 
-build\:stack:
-	sudo docker stack init server
+build\:swarm:
+	sudo docker swarm init
 
 deploy:
 	 for file in swarm-compose*.yml; do \
