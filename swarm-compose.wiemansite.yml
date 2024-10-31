@@ -57,7 +57,7 @@ services:
   blobstore:
     image: localhost:5000/blobstore
     networks:
-      - wiemanapi_network
+      - wiemanimages_network
       - reverse_proxy_network
     secrets:
       - blobstore_access_key

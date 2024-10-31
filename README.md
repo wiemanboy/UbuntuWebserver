@@ -32,8 +32,8 @@ printf "value" | sudo docker secret create secret_name -
 
 The traefik password needs to be generated:
 ```bash
-htpasswd -c -s passwordfile admin
-sudo docker secret create traefik_password passwordfile 
+htpasswd -c -s userfile admin
+sudo docker secret create traefik_users userfile 
 ```
 
 ### Auto setup
