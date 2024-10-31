@@ -15,8 +15,8 @@ jobs:
 
       - name: Deploy
         run: |
-          echo "${{ secrets.PRIVATE_KEY }}" > private_key && chmod 600 private_key
-          rsync -av --exclude='data/' --exclude='.*' -e "ssh -o StrictHostKeyChecking=no -i private_key ./ ${{ secrets.USERNAME }}@${{ secrets.HOST }}:~/server
+          echo "${{ secrets.PRIVATE_KEY }}" > .private_key && chmod 600 .private_key
+          rsync -av --exclude='data/' --exclude='.*' -e "ssh -o StrictHostKeyChecking=no -i .private_key" ./ ${{secrets.USERNAME}}@${{secrets.HOST}}:~/server
           ssh -o StrictHostKeyChecking=no -i private_key ${{secrets.USERNAME}}@${{secrets.HOST}} '
             cd ~/server
             make deploy
