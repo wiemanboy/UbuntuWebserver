@@ -52,8 +52,8 @@ services:
       - "443:443"
       - "8082:8082"
     volumes:
-      - ./reverse-proxy-logs:/logs
-      - ./letsencrypt:/letsencrypt
+      - ./data/logs/reverse-proxy:/logs
+      - ./data/letsencrypt:/letsencrypt
       - /var/run/docker.sock:/var/run/docker.sock
 
   prometheus:
@@ -80,7 +80,7 @@ services:
       - traefik.http.routers.grafana.entrypoints=websecure
       - traefik.http.routers.grafana.tls.certresolver=jarnowiemannl-resolver
     volumes:
-      - ./grafana-storage:/var/lib/grafana
+      - ./data/grafana/storage:/var/lib/grafana
 
 networks:
   reverse_proxy_network:
