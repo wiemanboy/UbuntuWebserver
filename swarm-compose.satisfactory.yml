@@ -22,9 +22,14 @@ services:
           memory: 4G
     labels:
       - traefik.enable=true
-      - traefik.http.routers.satisfactory-server.rule=Host(`dev.jarnowieman.nl`)
-      - traefik.http.routers.satisfactory-server.entrypoints=websecure
-      - traefik.http.routers.satisfactory-server.tls.certresolver=jarnowiemannl-resolver
+      - traefik.tcp.routers.satisfactory.rule=HostSNI(`dev.jarnowieman.nl`)
+      - traefik.tcp.routers.satisfactory.entrypoints=websecure
+      - traefik.tcp.routers.satisfactory.tls.certresolver=jarnowiemannl-resolver
+      - traefik.tcp.routers.satisfactory.tls.passthrough=true
+      - traefik.tcp.services.satisfactory.loadbalancer.server.port=7777
+
+      - traefik.udp.routers.satisfactory.entrypoints=streaming
+      - traefik.udp.services.satisfactory.loadbalancer.server.port=7777
 
 networks:
   reverse_proxy_network:
