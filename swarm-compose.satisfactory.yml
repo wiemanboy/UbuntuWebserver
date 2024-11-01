@@ -1,13 +1,13 @@
 services:
-  satisfactory-server:
+  satisfactory:
     image: 'wolveix/satisfactory-server:latest'
     networks:
       - reverse_proxy_network
     ports:
-      - ':7777/udp'
-      - ':7777/tcp'
+      - '7777:7777/udp'
+      - '7777:7777/tcp'
     volumes:
-      - './data/satisfactory-server:/config'
+      - './data/satisfactory:/config'
     environment:
       - MAXPLAYERS=8
       - PGID=1000
