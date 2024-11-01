@@ -1,4 +1,4 @@
-FROM minio/minio:master
+FROM minio/minio:latest
 
 COPY create-buckets.sh /usr/local/bin/create-buckets.sh
 RUN chmod +x /usr/local/bin/create-buckets.sh
