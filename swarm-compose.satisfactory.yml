@@ -3,9 +3,6 @@ services:
     image: 'wolveix/satisfactory-server:latest'
     networks:
       - reverse_proxy_network
-    ports:
-      - '7777:7777/udp'
-      - '7777:7777/tcp'
     volumes:
       - './data/satisfactory:/config'
     environment:
@@ -22,14 +19,12 @@ services:
           memory: 4G
     labels:
       - traefik.enable=true
-      - traefik.tcp.routers.satisfactory.rule=HostSNI(`dev.jarnowieman.nl`)
-      - traefik.tcp.routers.satisfactory.entrypoints=websecure
-      - traefik.tcp.routers.satisfactory.tls.certresolver=jarnowiemannl-resolver
-      - traefik.tcp.routers.satisfactory.tls.passthrough=true
-      - traefik.tcp.services.satisfactory.loadbalancer.server.port=7777
+      - traefik.http.routers.satisfactory.rule=Host(`dev.jarnowieman.nl`)
+      - traefik.http.routers.satisfactory.entrypoints=satisfactory-tcp
+      - traefik.http.services.satisfactory.loadbalancer.server.scheme=https
+      - traefik.http.routers.satisfactory.tls.certresolver=jarnowiemannl-resolver
 
-      - traefik.udp.routers.satisfactory.entrypoints=streaming
-      - traefik.udp.services.satisfactory.loadbalancer.server.port=7777
+      - traefik.udp.routers.satisfactory.entrypoints=satisfactory-udp
 
 networks:
   reverse_proxy_network:

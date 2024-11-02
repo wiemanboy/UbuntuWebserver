@@ -16,10 +16,12 @@ services:
       # Entrypoints
       - --entrypoints.web.address=:80
       - --entrypoints.websecure.address=:443
-      - --entryPoints.streaming.address=:443/udp
+      - --entryPoints.satisfactory-tcp.address=:7777
+      - --entryPoints.satisfactory-udp.address=:7777/udp
       - --entrypoints.web.http.redirections.entryPoint.to=websecure
       - --entrypoints.web.http.redirections.entryPoint.scheme=https
       - --entrypoints.web.http.redirections.entrypoint.permanent=true
+      - --serversTransport.insecureSkipVerify=true
 
       # Let's Encrypt certificate resolver
       - --certificatesresolvers.jarnowiemannl-resolver.acme.tlschallenge=true
@@ -51,6 +53,8 @@ services:
     ports:
       - "80:80"
       - "443:443"
+      - "7777:7777"
+      - "7777:7777/udp"
       - "8082:8082"
     volumes:
       - ./data/logs/reverse-proxy:/logs
