@@ -19,10 +19,10 @@ services:
           memory: 4G
     labels:
       - traefik.enable=true
-      - traefik.http.routers.satisfactory.rule=Host(`dev.jarnowieman.nl`)
+      - traefik.http.routers.satisfactory.rule=Host(`sf.wiemanboy.com`)
       - traefik.http.routers.satisfactory.entrypoints=satisfactory-tcp
       - traefik.http.services.satisfactory.loadbalancer.server.scheme=https
-      - traefik.http.routers.satisfactory.tls.certresolver=jarnowiemannl-resolver
+      - traefik.http.routers.satisfactory.tls.certresolver=wiemanboycom-resolver
 
       - traefik.udp.routers.satisfactory.entrypoints=satisfactory-udp
 

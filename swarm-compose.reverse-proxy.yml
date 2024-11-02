@@ -28,6 +28,10 @@ services:
       - --certificatesresolvers.jarnowiemannl-resolver.acme.email=wiemanboy@gmail.com
       - --certificatesresolvers.jarnowiemannl-resolver.acme.storage=/letsencrypt/jarnowiemannl.json
 
+      - --certificatesresolvers.wiemanboycom-resolver.acme.tlschallenge=true
+      - --certificatesresolvers.wiemanboycom-resolver.acme.email=wiemanboy@gmail.com
+      - --certificatesresolvers.wiemanboycom-resolver.acme.storage=/letsencrypt/wiemanboycom.json
+
       # Logs
       - --log.level=INFO
       - --log.filePath=/logs/traefik.log
