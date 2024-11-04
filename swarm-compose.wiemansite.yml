@@ -9,7 +9,7 @@ services:
     labels:
       - traefik.enable=true
 
-      - traefik.http.routers.WiemanSiteNL.rule=HostRegexp(`(www\.)?(jarnowieman|wiemanboy).(nl|com)`)
+      - traefik.http.routers.WiemanSiteNL.rule=HostRegexp(`{subdomain:(www\\.)?}(jarnowieman|wiemanboy)\\.(nl|com)`)
       - traefik.http.routers.WiemanSiteNL.entrypoints=websecure
       - traefik.http.routers.WiemanSiteNL.tls.certresolver=default-resolver
 
@@ -38,12 +38,12 @@ services:
     labels:
       - traefik.enable=true
       # Direct user to wiemanimages api
-      - traefik.http.routers.api-redirect.rule=HostRegexp(`(www\.)?(jarnowieman|wiemanboy).(nl|com)`) && PathRegexp(`/((api|services)/files/).*`)
+      - traefik.http.routers.api-redirect.rule=HostRegexp(`{subdomain:(www\\.)?}(jarnowieman|wiemanboy)\\.(nl|com)`) && PathRegexp(`/((api|services)/files/).*`)
       - traefik.http.routers.api-redirect.entrypoints=websecure
       - traefik.http.routers.api-redirect.tls.certresolver=default-resolver
 
         # Redirect to /assets/
-      - traefik.http.routers.wiemanimages.rule=HostRegexp(`(www\.)?(jarnowieman|wiemanboy).(nl|com)`) && PathPrefix(`/assets/`)
+      - traefik.http.routers.wiemanimages.rule=HostRegexp(`{subdomain:(www\\.)?}(jarnowieman|wiemanboy)\\.(nl|com)`) && PathPrefix(`/assets/`)
       - traefik.http.routers.wiemanimages.middlewares=wiemanimages-replacepath@docker
       - traefik.http.middlewares.wiemanimages-replacepath.replacepathregex.regex=^/assets/(.*)
       - traefik.http.middlewares.wiemanimages-replacepath.replacepathregex.replacement=/api/files/$$1
@@ -95,7 +95,7 @@ services:
       SPRING_PROFILES_ACTIVE: prod
     labels:
       - traefik.enable=true
-      - traefik.http.routers.wiemanapi.rule=HostRegexp(`(www\.)?(jarnowieman|wiemanboy).(nl|com)`) && (PathRegexp(`/((api|services)/profiles/).*`) || PathRegexp(`.*/okta.*`))
+      - traefik.http.routers.wiemanapi.rule=HostRegexp(`{subdomain:(www\\.)?}(jarnowieman|wiemanboy)\\.(nl|com)`) && (PathRegexp(`/((api|services)/profiles/).*`) || PathRegexp(`.*/okta.*`))
       - traefik.http.routers.wiemanapi.entrypoints=websecure
       - traefik.http.routers.wiemanapi.tls.certresolver=default-resolver
 
