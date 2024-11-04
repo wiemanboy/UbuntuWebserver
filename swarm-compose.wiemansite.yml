@@ -48,6 +48,7 @@ services:
 
         # Redirect to /assets/
       - traefik.http.routers.wiemanimages.rule=Host(`jarnowieman.nl`) && PathPrefix(`/assets/`)
+      - traefik.http.routers.wiemanimages.priority=65
       - traefik.http.routers.wiemanimages.middlewares=wiemanimages-replacepath@docker
       - traefik.http.middlewares.wiemanimages-replacepath.replacepathregex.regex=^/assets/(.*)
       - traefik.http.middlewares.wiemanimages-replacepath.replacepathregex.replacement=/api/files/$$1
