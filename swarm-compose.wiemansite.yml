@@ -9,11 +9,11 @@ services:
     labels:
       - traefik.enable=true
 
-      - traefik.http.routers.WiemanSiteJW.rule=HostRegexp(`{subdomain:(www\.)?}jarnowieman.nl`)
+      - traefik.http.routers.WiemanSiteJW.rule=Host(`jarnowieman.nl`) || Host(`www.jarnowieman.nl`)
       - traefik.http.routers.WiemanSiteJW.entrypoints=websecure
       - traefik.http.routers.WiemanSiteJW.tls.certresolver=jarnowiemannl-resolver
 
-      - traefik.http.routers.WiemanSiteWB.rule=HostRegexp(`{subdomain:(www\.)?}wiemanboy.com`)
+      - traefik.http.routers.WiemanSiteWB.rule=Host(`wiemanboy.com`) || Host(`www.wiemanboy.com`)
       - traefik.http.routers.WiemanSiteWB.entrypoints=websecure
       - traefik.http.routers.WiemanSiteWB.tls.certresolver=wiemanboycom-resolver
 
