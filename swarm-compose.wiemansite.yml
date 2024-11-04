@@ -5,7 +5,7 @@ services:
       - reverse_proxy_network
     environment:
       PUBLIC_API_BASE_URL: "https://jarnowieman.nl/api"
-      PUBLIC_IMAGE_BASE_URL: "https://jarnowieman.nl/assets"
+      PUBLIC_IMAGE_BASE_URL: "https://jarnowieman.nl/api/files"
     labels:
       - traefik.enable=true
 
@@ -41,19 +41,10 @@ services:
       AUTH0_CALLBACK_URL: "https://jarnowieman.nl/services/files/auth/callback"
     labels:
       - traefik.enable=true
-      # Direct user to wiemanimages api
+
       - traefik.http.routers.api-redirect.rule=Host(`jarnowieman.nl`) && PathRegexp(`/((api|services)/files/).*`)
       - traefik.http.routers.api-redirect.entrypoints=websecure
       - traefik.http.routers.api-redirect.tls.certresolver=jarnowiemannl-resolver
-
-        # Redirect to /assets/
-      - traefik.http.routers.wiemanimages.rule=Host(`jarnowieman.nl`) && PathPrefix(`/assets/`)
-      - traefik.http.routers.wiemanimages.priority=65
-      - traefik.http.routers.wiemanimages.middlewares=wiemanimages-replacepath@docker
-      - traefik.http.middlewares.wiemanimages-replacepath.replacepathregex.regex=^/assets/(.*)
-      - traefik.http.middlewares.wiemanimages-replacepath.replacepathregex.replacement=/api/files/$$1
-      - traefik.http.routers.wiemanimages.entrypoints=websecure
-      - traefik.http.routers.wiemanimages.tls.certresolver=jarnowiemannl-resolver
 
   blobstore:
     image: localhost:5000/blobstore
