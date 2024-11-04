@@ -9,13 +9,9 @@ services:
     labels:
       - traefik.enable=true
 
-      - traefik.http.routers.WiemanSite.rule=Host(`jarnowieman.nl`)
-      - traefik.http.routers.WiemanSite.entrypoints=websecure
-      - traefik.http.routers.WiemanSite.tls.certresolver=jarnowiemannl-resolver
-
-      - traefik.http.routers.wiemansite-www.rule=Host(`www.jarnowieman.nl`)
-      - traefik.http.routers.wiemansite-www.entrypoints=websecure
-      - traefik.http.routers.wiemansite-www.tls.certresolver=jarnowiemannl-resolver
+      - traefik.http.routers.WiemanSiteNL.rule=HostRegexp(`^(www\.)?(jarnowieman|wiemanboy).(nl|com)$`)
+      - traefik.http.routers.WiemanSiteNL.entrypoints=websecure
+      - traefik.http.routers.WiemanSiteNL.tls.certresolver=default-resolver
 
 
   wiemanimages:
@@ -42,17 +38,17 @@ services:
     labels:
       - traefik.enable=true
       # Direct user to wiemanimages api
-      - traefik.http.routers.api-redirect.rule=Host(`jarnowieman.nl`) && PathRegexp(`/((api|services)/files/).*`)
+      - traefik.http.routers.api-redirect.rule=HostRegexp(`^(www\.)?(jarnowieman|wiemanboy).(nl|com)$`) && PathRegexp(`/((api|services)/files/).*`)
       - traefik.http.routers.api-redirect.entrypoints=websecure
-      - traefik.http.routers.api-redirect.tls.certresolver=jarnowiemannl-resolver
+      - traefik.http.routers.api-redirect.tls.certresolver=default-resolver
 
         # Redirect to /assets/
-      - traefik.http.routers.wiemanimages.rule=Host(`jarnowieman.nl`) && PathPrefix(`/assets/`)
+      - traefik.http.routers.wiemanimages.rule=HostRegexp(`^(www\.)?(jarnowieman|wiemanboy).(nl|com)$`) && PathPrefix(`/assets/`)
       - traefik.http.routers.wiemanimages.middlewares=wiemanimages-replacepath@docker
       - traefik.http.middlewares.wiemanimages-replacepath.replacepathregex.regex=^/assets/(.*)
       - traefik.http.middlewares.wiemanimages-replacepath.replacepathregex.replacement=/api/files/$$1
       - traefik.http.routers.wiemanimages.entrypoints=websecure
-      - traefik.http.routers.wiemanimages.tls.certresolver=jarnowiemannl-resolver
+      - traefik.http.routers.wiemanimages.tls.certresolver=default-resolver
 
   blobstore:
     image: localhost:5000/blobstore
@@ -70,7 +66,7 @@ services:
       - traefik.http.routers.blobstore.rule=Host(`minio.jarnowieman.nl`)
       - traefik.http.services.blobstore.loadbalancer.server.port=9001
       - traefik.http.routers.blobstore.entrypoints=websecure
-      - traefik.http.routers.blobstore.tls.certresolver=jarnowiemannl-resolver
+      - traefik.http.routers.blobstore.tls.certresolver=default-resolver
     volumes:
       - ./data/minio:/data
     command: server /data --console-address ":9001"
@@ -99,9 +95,9 @@ services:
       SPRING_PROFILES_ACTIVE: prod
     labels:
       - traefik.enable=true
-      - traefik.http.routers.wiemanapi.rule=Host(`jarnowieman.nl`) && (PathRegexp(`/((api|services)/profiles/).*`) || PathRegexp(`.*/okta.*`))
+      - traefik.http.routers.wiemanapi.rule=HostRegexp(`^(www\.)?(jarnowieman|wiemanboy).(nl|com)$`) && (PathRegexp(`/((api|services)/profiles/).*`) || PathRegexp(`.*/okta.*`))
       - traefik.http.routers.wiemanapi.entrypoints=websecure
-      - traefik.http.routers.wiemanapi.tls.certresolver=jarnowiemannl-resolver
+      - traefik.http.routers.wiemanapi.tls.certresolver=default-resolver
 
   doc-store:
     image: mongo:4

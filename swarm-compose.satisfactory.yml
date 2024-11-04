@@ -22,7 +22,7 @@ services:
       - traefik.http.routers.satisfactory.rule=Host(`sf.wiemanboy.com`)
       - traefik.http.routers.satisfactory.entrypoints=satisfactory-tcp
       - traefik.http.services.satisfactory.loadbalancer.server.scheme=https
-      - traefik.http.routers.satisfactory.tls.certresolver=wiemanboycom-resolver
+      - traefik.http.routers.satisfactory.tls.certresolver=default-resolver
 
       - traefik.udp.routers.satisfactory.entrypoints=satisfactory-udp
 
