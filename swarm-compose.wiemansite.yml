@@ -9,13 +9,13 @@ services:
     labels:
       - traefik.enable=true
 
-      - traefik.http.routers.WiemanSite.rule=Host(`jarnowieman.nl`)
-      - traefik.http.routers.WiemanSite.entrypoints=websecure
-      - traefik.http.routers.WiemanSite.tls.certresolver=jarnowiemannl-resolver
+      - traefik.http.routers.WiemanSiteJW.rule=HostRegexp(`jarnowieman.nl`, `{subdomain:(www\.)?}jarnowieman.nl`)
+      - traefik.http.routers.WiemanSiteJW.entrypoints=websecure
+      - traefik.http.routers.WiemanSiteJW.tls.certresolver=jarnowiemannl-resolver
 
-      - traefik.http.routers.wiemansite-www.rule=Host(`www.jarnowieman.nl`)
-      - traefik.http.routers.wiemansite-www.entrypoints=websecure
-      - traefik.http.routers.wiemansite-www.tls.certresolver=jarnowiemannl-resolver
+      - traefik.http.routers.WiemanSiteWB.rule=HostRegexp(`wiemanboy.com`, `{subdomain:(www\.)?}wiemanboy.com`)
+      - traefik.http.routers.WiemanSiteWB.entrypoints=websecure
+      - traefik.http.routers.WiemanSiteWB.tls.certresolver=wiemanboycom-resolver
 
 
   wiemanimages:
