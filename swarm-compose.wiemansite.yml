@@ -95,7 +95,7 @@ services:
       SPRING_PROFILES_ACTIVE: prod
     labels:
       - traefik.enable=true
-      - traefik.http.routers.wiemanapi.rule=HostHostRegexp(`^(www\.)?(jarnowieman|wiemanboy).(nl|com)$$`) && (PathRegexp(`/((api|services)/profiles/).*`) || PathRegexp(`.*/okta.*`))
+      - traefik.http.routers.wiemanapi.rule=HostHostRegexp(`jarnowieman.nl`, `^(www\.)?(jarnowieman|wiemanboy).(nl|com)$$`) && (PathRegexp(`/((api|services)/profiles/).*`) || PathRegexp(`.*/okta.*`))
       - traefik.http.routers.wiemanapi.entrypoints=websecure
       - traefik.http.routers.wiemanapi.tls.certresolver=default-resolver
 
