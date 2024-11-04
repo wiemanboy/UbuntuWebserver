@@ -1,0 +1,31 @@
+services:
+  satisfactory:
+    image: 'wolveix/satisfactory-server:latest'
+    networks:
+      - reverse_proxy_network
+    volumes:
+      - './data/satisfactory:/config'
+    environment:
+      - MAXPLAYERS=8
+      - PGID=1000
+      - PUID=1000
+      - ROOTLESS=false
+      - STEAMBETA=false
+    deploy:
+      resources:
+        limits:
+          memory: 16G
+        reservations:
+          memory: 4G
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.satisfactory.rule=Host(`sf.wiemanboy.com`)
+      - traefik.http.routers.satisfactory.entrypoints=satisfactory-tcp
+      - traefik.http.services.satisfactory.loadbalancer.server.scheme=https
+      - traefik.http.routers.satisfactory.tls.certresolver=wiemanboycom-resolver
+
+      - traefik.udp.routers.satisfactory.entrypoints=satisfactory-udp
+
+networks:
+  reverse_proxy_network:
+    external: true
