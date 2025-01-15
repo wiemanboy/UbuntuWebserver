@@ -1,5 +1,7 @@
 services:
   minecraft:
+    networks:
+      - reverse_proxy_network
     image: itzg/minecraft-server
     tty: true
     stdin_open: true
@@ -17,4 +19,9 @@ services:
       - traefik.enable=true
       - traefik.http.routers.minecraft.rule=Host(`mc.wiemanboy.com`)
       - traefik.http.routers.minecraft.entrypoints=websecure
+      - traefik.http.services.minecraft.loadbalancer.server.port=25565
       - traefik.http.routers.minecraft.tls.certresolver=wiemanboycom-resolver
+
+networks:
+  reverse_proxy_network:
+    external: true
