@@ -17,10 +17,8 @@ services:
           memory: 4G
     labels:
       - traefik.enable=true
-      - traefik.http.routers.minecraft.rule=Host(`mc.wiemanboy.com`)
-      - traefik.http.routers.minecraft.entrypoints=websecure
-      - traefik.http.services.minecraft.loadbalancer.server.port=25565
-      - traefik.http.routers.minecraft.tls.certresolver=wiemanboycom-resolver
+      - traefik.tcp.routers.minecraft.rule=HostSNI(`*`)
+      - traefik.tcp.routers.minecraft.entrypoints=minecraft
 
 networks:
   reverse_proxy_network:

@@ -16,8 +16,12 @@ services:
       # Entrypoints
       - --entrypoints.web.address=:80
       - --entrypoints.websecure.address=:443
+
       - --entryPoints.satisfactory-tcp.address=:7777
       - --entryPoints.satisfactory-udp.address=:7777/udp
+
+      - --entryPoints.minecraft.address=:25565
+
       - --entrypoints.web.http.redirections.entryPoint.to=websecure
       - --entrypoints.web.http.redirections.entryPoint.scheme=https
       - --entrypoints.web.http.redirections.entrypoint.permanent=true
