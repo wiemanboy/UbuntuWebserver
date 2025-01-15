@@ -1,0 +1,20 @@
+services:
+  minecraft:
+    image: itzg/minecraft-server
+    tty: true
+    stdin_open: true
+    environment:
+      EULA: "TRUE"
+    volumes:
+      - ./data/minecraft:/data
+    deploy:
+      resources:
+        limits:
+          memory: 16G
+        reservations:
+          memory: 4G
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.minecraft.rule=Host(`mc.wiemanboy.com`)
+      - traefik.http.routers.minecraft.entrypoints=websecure
+      - traefik.http.routers.minecraft.tls.certresolver=wiemanboycom-resolver
