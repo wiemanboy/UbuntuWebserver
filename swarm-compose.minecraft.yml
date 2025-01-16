@@ -7,6 +7,22 @@ services:
     stdin_open: true
     environment:
       EULA: "TRUE"
+      MAX_MEMORY: "16G"
+      TYPE: "SNAPSHOT"
+      VERSION: "LATEST"
+      DIFFICULTY: "hard"
+      ICON: "https://wiemanboy.com/favicon.svg"
+      MAX_PLAYERS: "20"
+      SNOOPER_ENABLED: "false"
+      MAX_BUILD_HEIGHT: "256"
+      SPAWN_PROTECTION: "0"
+      VIEW_DISTANCE: "10"
+      LEVEL: "world"
+      ALLOW_FLIGHT: "TRUE"
+      SERVER_NAME: "WiemanServer"
+      PLAYER_IDLE_TIMEOUT: "0"
+      EXEC_DIRECTLY: "true"
+      ENABLE_WHITELIST: "true"
     volumes:
       - ./data/minecraft:/data
     deploy:
