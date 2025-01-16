@@ -8,8 +8,8 @@ services:
     environment:
       EULA: "TRUE"
       MAX_MEMORY: "16G"
-      TYPE: "SNAPSHOT"
-      VERSION: "LATEST"
+      TYPE: "VANILLA"
+      VERSION: "SNAPSHOT"
       DIFFICULTY: "hard"
       ICON: "https://wiemanboy.com/favicon.svg"
       MAX_PLAYERS: "20"
