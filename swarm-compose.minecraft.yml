@@ -26,6 +26,8 @@ services:
       ENABLE_WHITELIST: "true"
     volumes:
       - ./data/minecraft:/data
+    ports:
+      - "25565:25565"
     deploy:
       resources:
         limits:
