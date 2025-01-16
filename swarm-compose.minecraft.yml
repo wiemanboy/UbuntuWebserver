@@ -64,4 +64,3 @@ networks:
   reverse_proxy_network:
     external: true
   minecraft_network:
-    external: true
