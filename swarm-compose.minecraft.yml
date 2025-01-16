@@ -54,7 +54,7 @@ services:
       PRE_BACKUP_SCRIPT: |
         rcon-cli /say "§l§d$$(TZ="Europe/Amsterdam" date +"[%Y/%m/%d %H:%M:%S]")§r §eStarting backup..."
       POST_BACKUP_SCRIPT: |
-        rcon-cli /say | "§l§d$$(TZ="Europe/Amsterdam" date +"[%Y/%m/%d %H:%M:%S]")§r §eBackup complete -> §c$$(ls -1 *.tgz | tail -n 1 | sed 's/\.tgz$$//')§r§e, next backup at: §a§u$$(TZ="Europe/Amsterdam" date -d "$$(echo $BACKUP_INTERVAL | sed 's/h$$//') hours" +"%H:%M")"
+        rcon-cli /say "§l§d$$(TZ="Europe/Amsterdam" date +"[%Y/%m/%d %H:%M:%S]")§r §eBackup complete -> §c$$(ls -1 *.tgz | tail -n 1 | sed 's/\.tgz$$//')§r§e, next backup at: §a§u$$(TZ="Europe/Amsterdam" date -d "$$(echo $$BACKUP_INTERVAL | sed 's/h$$//') hours" +"%H:%M")"
       POST_BACKUP_SCRIPT_FILE: /post-backup.sh
     volumes:
       - ./data/minecraft:/data:ro
