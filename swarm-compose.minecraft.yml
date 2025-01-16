@@ -31,6 +31,8 @@ services:
           memory: 16G
         reservations:
           memory: 4G
+    ports:
+      - "25565:25565"
     labels:
       - traefik.enable=true
       - traefik.tcp.routers.minecraft.rule=HostSNI(`*`)
