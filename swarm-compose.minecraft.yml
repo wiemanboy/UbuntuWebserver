@@ -32,18 +32,17 @@ services:
           memory: 16G
         reservations:
           memory: 4G
-    ports:
-      - "25565:25565"
     labels:
       - traefik.enable=true
       - traefik.tcp.routers.minecraft.rule=HostSNI(`*`)
       - traefik.tcp.routers.minecraft.entrypoints=minecraft
 
-  backups:
+  minecraft-backups:
     image: itzg/mc-backup
     environment:
       BACKUP_INTERVAL: "2h"
-      RCON_HOST: minecraft
+      RCON_HOST: "minecraft"
+      RCON_PORT: "25575"
       BACKUP_NAME: "world"
       PRUNE_BACKUPS_DAYS: "7"
       PAUSE_IF_NO_PLAYERS: "true"
