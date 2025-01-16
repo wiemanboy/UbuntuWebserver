@@ -11,7 +11,8 @@ services:
       TYPE: "VANILLA"
       VERSION: "SNAPSHOT"
       DIFFICULTY: "hard"
-      ICON: "https://wiemanboy.com/favicon.svg"
+      ICON: "https://jarnowieman.nl/api/files/minecraft/server_icon"
+      MOTD: "Welcome to the WiemanServer"
       MAX_PLAYERS: "20"
       SNOOPER_ENABLED: "false"
       MAX_BUILD_HEIGHT: "256"
@@ -37,6 +38,23 @@ services:
       - traefik.enable=true
       - traefik.tcp.routers.minecraft.rule=HostSNI(`*`)
       - traefik.tcp.routers.minecraft.entrypoints=minecraft
+
+  backups:
+    image: itzg/mc-backup
+    environment:
+      BACKUP_INTERVAL: "2h"
+      RCON_HOST: minecraft
+      BACKUP_NAME: "world"
+      PRUNE_BACKUPS_DAYS: "7"
+      PAUSE_IF_NO_PLAYERS: "true"
+      PRE_BACKUP_SCRIPT: |
+        echo "Starting backup from $$RCON_HOST to $$DEST_DIR"
+      POST_BACKUP_SCRIPT: |
+        echo "Backup complete"
+      POST_BACKUP_SCRIPT_FILE: /post-backup.sh
+    volumes:
+      - ./data/minecraft:/data:ro
+      - ./data/minecraft-backups:/backups
 
 networks:
   reverse_proxy_network:
