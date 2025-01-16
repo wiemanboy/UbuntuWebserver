@@ -13,9 +13,7 @@ services:
       VERSION: "SNAPSHOT"
       DIFFICULTY: "hard"
       ICON: "https://jarnowieman.nl/api/files/minecraft/server_icon"
-      MOTD: | 
-        §l§5WiemanServer§r
-        §rWelcome to my server!
+      MOTD: "§l§5WiemanServer§r\n§rWelcome to my server!"
       MAX_PLAYERS: "20"
       SNOOPER_ENABLED: "false"
       MAX_BUILD_HEIGHT: "256"
