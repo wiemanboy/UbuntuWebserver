@@ -9,24 +9,23 @@ services:
     environment:
       EULA: "TRUE"
       MAX_MEMORY: "16G"
-      TYPE: "AUTO_CURSEFORGE"
+      TYPE: "PAPER"
       VERSION: "1.21.1"
       DIFFICULTY: "hard"
       ICON: "https://jarnowieman.nl/api/files/minecraft/server_icon"
       MOTD: "§l§5WiemanServer§r\n§rWelcome to my server!"
       VANILLATWEAKS_SHARECODE: "cFTVFy,M6j9tu"
       DATAPACKS: ""
-      CF_PAGE_URL: "https://www.curseforge.com/minecraft/modpacks/all-the-mods-10/files/6091559"
+      # CF_PAGE_URL: "https://www.curseforge.com/minecraft/modpacks/all-the-mods-10/files/6091559"
       CF_API_KEY: %%CF_API_KEY%%
       CURSEFORGE_FILES: |
-        https://www.curseforge.com/minecraft/mc-mods/bluemap/files/5919132
-      #  https://www.curseforge.com/minecraft/bukkit-plugins/dynmap/files/6090792 # PAPERMC dynmap
+        https://www.curseforge.com/minecraft/bukkit-plugins/dynmap/files/6090792
       MAX_PLAYERS: "20"
       SNOOPER_ENABLED: "false"
       MAX_BUILD_HEIGHT: "256"
       SPAWN_PROTECTION: "0"
       VIEW_DISTANCE: "10"
-      LEVEL: "atm10"
+      LEVEL: "world"
       ALLOW_FLIGHT: "TRUE"
       SERVER_NAME: "WiemanServer"
       PLAYER_IDLE_TIMEOUT: "0"
