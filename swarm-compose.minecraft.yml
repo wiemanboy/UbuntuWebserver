@@ -9,23 +9,24 @@ services:
     environment:
       EULA: "TRUE"
       MAX_MEMORY: "16G"
-      TYPE: "PAPER"
+      TYPE: "AUTO_CURSEFORGE"
       VERSION: "1.21.1"
       DIFFICULTY: "hard"
       ICON: "https://jarnowieman.nl/api/files/minecraft/server_icon"
       MOTD: "§l§5WiemanServer§r\n§rWelcome to my server!"
       VANILLATWEAKS_SHARECODE: "cFTVFy,M6j9tu"
       DATAPACKS: ""
-      # CF_PAGE_URL: "https://www.curseforge.com/minecraft/modpacks/all-the-mods-10/files/6091559"
+      CF_PAGE_URL: "https://www.curseforge.com/minecraft/modpacks/all-the-mods-10/files/6091559"
       CF_API_KEY: %%CF_API_KEY%%
       CURSEFORGE_FILES: |
-        https://www.curseforge.com/minecraft/bukkit-plugins/dynmap/files/6090792
+        https://www.curseforge.com/minecraft/mc-mods/bluemap/files/5919132
+      #  https://www.curseforge.com/minecraft/bukkit-plugins/dynmap/files/6090792 # PAPERMC dynmap
       MAX_PLAYERS: "20"
       SNOOPER_ENABLED: "false"
       MAX_BUILD_HEIGHT: "256"
       SPAWN_PROTECTION: "0"
       VIEW_DISTANCE: "10"
-      LEVEL: "world"
+      LEVEL: "atm10"
       ALLOW_FLIGHT: "TRUE"
       SERVER_NAME: "WiemanServer"
       PLAYER_IDLE_TIMEOUT: "0"
@@ -48,11 +49,11 @@ services:
       - traefik.tcp.routers.minecraft.rule=HostSNI(`*`)
       - traefik.tcp.routers.minecraft.entrypoints=minecraft
 
-      - traefik.http.routers.dynmap.service=dynmap-service
-      - traefik.http.services.dynmap-service.loadbalancer.server.port=8123
-      - traefik.http.routers.dynmap.rule=Host(`mc.wiemanboy.com`)
-      - traefik.http.routers.dynmap.entrypoints=websecure
-      - traefik.http.routers.dynmap.tls.certresolver=wiemanboycom-resolver
+      - traefik.http.routers.mcmap.service=mcmap-service
+      - traefik.http.services.mcmap-service.loadbalancer.server.port=8123
+      - traefik.http.routers.mcmap.rule=Host(`mc.wiemanboy.com`)
+      - traefik.http.routers.mcmap.entrypoints=websecure
+      - traefik.http.routers.mcmap.tls.certresolver=wiemanboycom-resolver
 
   minecraft-backups:
     networks:
