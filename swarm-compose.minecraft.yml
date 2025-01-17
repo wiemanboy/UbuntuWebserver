@@ -45,11 +45,11 @@ services:
     labels:
       - traefik.enable=true
 
-      - traefik.minecraft.port=25565
       - traefik.tcp.routers.minecraft.rule=HostSNI(`*`)
       - traefik.tcp.routers.minecraft.entrypoints=minecraft
 
-      - traefik.dynmap.port=8123
+      - traefik.http.routers.dynmap.service=dynmap-service
+      - traefik.http.services.dynmap-service.loadbalancer.server.port=8123
       - traefik.http.routers.dynmap.rule=Host(`mc.wiemanboy.com`)
       - traefik.http.routers.dynmap.entrypoints=websecure
       - traefik.http.routers.dynmap.tls.certresolver=wiemanboycom-resolver
