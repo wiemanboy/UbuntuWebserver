@@ -3,27 +3,29 @@ services:
     networks:
       - reverse_proxy_network
       - minecraft_network
-    image: itzg/minecraft-server:java8
+    image: itzg/minecraft-server:latest
     tty: true
     stdin_open: true
     environment:
       EULA: "TRUE"
       MAX_MEMORY: "16G"
-      TYPE: "AUTO_CURSEFORGE"
-      VERSION: "1.12.2"
+      TYPE: "PAPER"
+      VERSION: "LATEST"
       DIFFICULTY: "hard"
       ICON: "https://jarnowieman.nl/api/files/minecraft/server_icon"
       MOTD: "§l§5WiemanServer§r\n§rWelcome to my server!"
       VANILLATWEAKS_SHARECODE: "cFTVFy,M6j9tu"
       DATAPACKS: ""
-      CF_PAGE_URL: "https://www.curseforge.com/minecraft/modpacks/rlcraft/files/4612979"
+      # CF_PAGE_URL: "https://www.curseforge.com/minecraft/modpacks/rlcraft/files/4612979"
       CF_API_KEY: %%CF_API_KEY%%
+      CURSEFORGE_FILES: |
+        https://www.curseforge.com/minecraft/bukkit-plugins/dynmap/files/6090792
       MAX_PLAYERS: "20"
       SNOOPER_ENABLED: "false"
       MAX_BUILD_HEIGHT: "256"
       SPAWN_PROTECTION: "0"
       VIEW_DISTANCE: "10"
-      LEVEL: "rlcraft"
+      LEVEL: "world"
       ALLOW_FLIGHT: "TRUE"
       SERVER_NAME: "WiemanServer"
       PLAYER_IDLE_TIMEOUT: "0"
@@ -33,6 +35,7 @@ services:
       - ./data/minecraft:/data
     ports:
       - "25565:25565"
+      - "8123:8123"
     deploy:
       resources:
         limits:
@@ -41,8 +44,16 @@ services:
           memory: 4G
     labels:
       - traefik.enable=true
+
+      - traefik.tcp.routers.minecraft.service=minecraft-service
       - traefik.tcp.routers.minecraft.rule=HostSNI(`*`)
       - traefik.tcp.routers.minecraft.entrypoints=minecraft
+
+      - traefik.http.routers.minecraft.service=minecraft-service
+      - traefik.http.services.minecraft-service.loadbalancer.server.port=8123
+      - traefik.http.routers.minecraft.rule=Host(`mc.wiemanboy.com`)
+      - traefik.http.routers.minecraft.entrypoints=websecure
+      - traefik.http.routers.minecraft.tls.certresolver=wiemanboycom-resolver
 
   minecraft-backups:
     networks:
