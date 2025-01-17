@@ -14,6 +14,7 @@ services:
       DIFFICULTY: "hard"
       ICON: "https://jarnowieman.nl/api/files/minecraft/server_icon"
       MOTD: "§l§5WiemanServer§r\n§rWelcome to my server!"
+      VANILLATWEAKS_SHARECODE: "cFTVFy,M6j9tu"
       MAX_PLAYERS: "20"
       SNOOPER_ENABLED: "false"
       MAX_BUILD_HEIGHT: "256"
