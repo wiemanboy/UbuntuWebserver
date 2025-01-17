@@ -9,14 +9,14 @@ services:
     environment:
       EULA: "TRUE"
       MAX_MEMORY: "16G"
-      TYPE: "PAPER"
-      VERSION: "LATEST"
+      TYPE: "AUTO_CURSEFORGE"
+      VERSION: "1.21.1"
       DIFFICULTY: "hard"
       ICON: "https://jarnowieman.nl/api/files/minecraft/server_icon"
       MOTD: "§l§5WiemanServer§r\n§rWelcome to my server!"
       VANILLATWEAKS_SHARECODE: "cFTVFy,M6j9tu"
       DATAPACKS: ""
-      # CF_PAGE_URL: "https://www.curseforge.com/minecraft/modpacks/rlcraft/files/4612979"
+      CF_PAGE_URL: "https://www.curseforge.com/minecraft/modpacks/all-the-mods-10/files/6091559"
       CF_API_KEY: %%CF_API_KEY%%
       CURSEFORGE_FILES: |
         https://www.curseforge.com/minecraft/bukkit-plugins/dynmap/files/6090792
@@ -25,7 +25,7 @@ services:
       MAX_BUILD_HEIGHT: "256"
       SPAWN_PROTECTION: "0"
       VIEW_DISTANCE: "10"
-      LEVEL: "world"
+      LEVEL: "atm10"
       ALLOW_FLIGHT: "TRUE"
       SERVER_NAME: "WiemanServer"
       PLAYER_IDLE_TIMEOUT: "0"
@@ -34,8 +34,8 @@ services:
     volumes:
       - ./data/minecraft:/data
     ports:
-      - ":25565"
-      - ":8123"
+      - "25565:25565"
+      - "8123:8123"
     deploy:
       resources:
         limits:
