@@ -19,7 +19,8 @@ services:
       CF_PAGE_URL: "https://www.curseforge.com/minecraft/modpacks/all-the-mods-10/files/6091559"
       CF_API_KEY: %%CF_API_KEY%%
       CURSEFORGE_FILES: |
-        https://www.curseforge.com/minecraft/bukkit-plugins/dynmap/files/6090792
+        https://www.curseforge.com/minecraft/mc-mods/bluemap/files/5919132
+      #  https://www.curseforge.com/minecraft/bukkit-plugins/dynmap/files/6090792 # PAPERMC dynmap
       MAX_PLAYERS: "20"
       SNOOPER_ENABLED: "false"
       MAX_BUILD_HEIGHT: "256"
