@@ -45,15 +45,14 @@ services:
     labels:
       - traefik.enable=true
 
-      - traefik.tcp.routers.minecraft.service=minecraft-service
+      - traefik.minecraft.port=25565
       - traefik.tcp.routers.minecraft.rule=HostSNI(`*`)
       - traefik.tcp.routers.minecraft.entrypoints=minecraft
 
-      - traefik.http.routers.minecraft.service=minecraft-service
-      - traefik.http.services.minecraft-service.loadbalancer.server.port=8123
-      - traefik.http.routers.minecraft.rule=Host(`mc.wiemanboy.com`)
-      - traefik.http.routers.minecraft.entrypoints=websecure
-      - traefik.http.routers.minecraft.tls.certresolver=wiemanboycom-resolver
+      - traefik.dynmap.port=8123
+      - traefik.http.routers.dynmap.rule=Host(`mc.wiemanboy.com`)
+      - traefik.http.routers.dynmap.entrypoints=websecure
+      - traefik.http.routers.dynmap.tls.certresolver=wiemanboycom-resolver
 
   minecraft-backups:
     networks:
