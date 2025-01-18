@@ -63,7 +63,7 @@ services:
       BACKUP_INTERVAL: "2h"
       RCON_HOST: "minecraft"
       RCON_PORT: "25575"
-      BACKUP_NAME: "world"
+      BACKUP_NAME: "atm10"
       PRUNE_BACKUPS_DAYS: "7"
       PAUSE_IF_NO_PLAYERS: "true"
       PRE_BACKUP_SCRIPT: |
