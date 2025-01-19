@@ -94,8 +94,10 @@ services:
       - logging_network
     volumes:
       - ./prometheus.yml:/etc/prometheus/prometheus.yml
+      - ./data/logs/prometheus:/prometheus
     command:
       - --config.file=/etc/prometheus/prometheus.yml
+      - --storage.tsdb.retention.size=10GB
     ports:
       - "9090:9090"
 
