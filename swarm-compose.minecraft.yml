@@ -75,6 +75,21 @@ services:
       - ./data/minecraft:/data:ro
       - ./data/minecraft-backups:/backups
 
+  file-browser:
+    networks:
+      - reverse_proxy_network
+    image: hurlenko/filebrowser
+    environment:
+      FB_BASEURL: "/files"
+    volumes:
+      - ./data/minecraft/atm10/computercraft/:/data
+      - ./data/filebrowser/config:/config
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.file-browser.rule=Host(`mc.wiemanboy.com`) && PathPrefix(`/files`)
+      - traefik.http.routers.file-browser.entrypoints=websecure
+      - traefik.http.routers.file-browser.tls.certresolver=wiemanboycom-resolver
+
 networks:
   reverse_proxy_network:
     external: true
