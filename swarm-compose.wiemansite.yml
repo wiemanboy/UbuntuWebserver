@@ -59,10 +59,10 @@ services:
       MINIO_ROOT_PASSWORD_FILE: /run/secrets/blobstore_secret_key
     labels:
       - traefik.enable=true
-      - traefik.http.routers.blobstore.rule=Host(`minio.jarnowieman.nl`)
+      - traefik.http.routers.blobstore.rule=Host(`blob.db.wiemanboy.com`)
       - traefik.http.services.blobstore.loadbalancer.server.port=9001
       - traefik.http.routers.blobstore.entrypoints=websecure
-      - traefik.http.routers.blobstore.tls.certresolver=jarnowiemannl-resolver
+      - traefik.http.routers.blobstore.tls.certresolver=wiemanboycom-resolver
     volumes:
       - ./data/minio:/data
     command: server /data --console-address ":9001"

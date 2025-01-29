@@ -53,11 +53,11 @@ services:
       - --metrics.prometheus.entryPoint=metrics
     labels:
       - traefik.enable=true
-      - traefik.http.routers.dashboard.rule=Host(`traefik.jarnowieman.nl`)
+      - traefik.http.routers.dashboard.rule=Host(`network.wiemanboy.com`)
       - traefik.http.routers.dashboard.service=api@internal
       - traefik.http.routers.dashboard.middlewares=auth
       - traefik.http.routers.dashboard.entrypoints=websecure
-      - traefik.http.routers.dashboard.tls.certresolver=jarnowiemannl-resolver
+      - traefik.http.routers.dashboard.tls.certresolver=wiemanboycom-resolver
       - traefik.http.middlewares.auth.basicauth.usersfile=/run/secrets/traefik_users
     ports:
       - "80:80"
@@ -111,9 +111,9 @@ services:
       - GF_SECURITY_ADMIN_PASSWORD=admin
     labels:
       - traefik.enable=true
-      - traefik.http.routers.grafana.rule=Host(`grafana.jarnowieman.nl`)
+      - traefik.http.routers.grafana.rule=Host(`dashboard.wiemanboy.com`)
       - traefik.http.routers.grafana.entrypoints=websecure
-      - traefik.http.routers.grafana.tls.certresolver=jarnowiemannl-resolver
+      - traefik.http.routers.grafana.tls.certresolver=wiemanboycom-resolver
     volumes:
       - ./data/grafana/storage:/var/lib/grafana
 
