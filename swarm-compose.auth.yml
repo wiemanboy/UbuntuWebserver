@@ -1,0 +1,63 @@
+services:
+  keycloak_db:
+    image: postgres:11.2-alpine
+    environment:
+      - POSTGRES_DB=keycloak
+      - POSTGRES_USER=keycloak
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_ROOT_PASSWORD=password
+    networks:
+      auth_network:
+    ports:
+      - ":5432"
+    volumes:
+      - keycloak_db_data_vol:/var/lib/postgresql/data
+    labels:
+      - "traefik.enable=false"
+
+  keycloak:
+    image: keycloak/keycloak
+    hostname: keycloak
+    environment:
+      - DB_VENDOR=POSTGRES
+      - DB_ADDR=keycloak_db
+      - DB_DATABASE=keycloak
+      - DB_PORT=5432
+      - DB_USER=keycloak
+      - DB_SCHEMA=public
+      - DB_PASSWORD=password
+      - PROXY_ADDRESS_FORWARDING=true
+      - KEYCLOAK_LOGLEVEL=INFO
+      - KEYCLOAK_USER=admin
+      - KEYCLOAK_PASSWORD=password
+    networks:
+      auth_network:
+    labels:
+      - traefik.port=8443
+      - traefik.frontend.rule=Host:auth.lab.com
+      - traefik.protocol=https
+    command: ["-b", "0.0.0.0", "-Dkeycloak.profile.feature.docker=enabled"]
+
+  keycloak-gatekeeper:
+    image: keycloak/keycloak-gatekeeper:7.0.0
+    labels:
+      - "traefik.port=3000"
+      - "traefik.frontend.rule=Host:service1.lab.com"
+      - "traefik.protocol=http"
+    restart: always
+    depends_on:
+      - keycloak
+    networks:
+      reverse_proxy_network:
+    external_links:
+      - traefik:auth.lab.com
+    volumes:
+      - ./keycloak-gatekeeper/keycloak-gatekeeper.conf:/etc/keycloak-gatekeeper.conf
+    entrypoint:
+      - /opt/keycloak-gatekeeper
+      - --config=/etc/keycloak-gatekeeper.conf
+
+networks:
+  auth_network:
+  reverse_proxy_network:
+    external: true
