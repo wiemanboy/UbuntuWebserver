@@ -14,7 +14,7 @@ services:
       DIFFICULTY: "hard"
       ICON: "https://jarnowieman.nl/api/files/minecraft/server_icon"
       MOTD: "§l§5WiemanServer§r\n§rWelcome to my server!"
-      VANILLATWEAKS_SHARECODE: "cFTVFy,M6j9tu"
+      VANILLATWEAKS_SHARECODE: "SQPPCu,M6j9tu"
       DATAPACKS: ""
       CF_PAGE_URL: "https://www.curseforge.com/minecraft/modpacks/all-the-mods-10/files/6091559"
       CF_API_KEY: %%CF_API_KEY%%
