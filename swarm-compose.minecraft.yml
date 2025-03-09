@@ -18,6 +18,10 @@ services:
       DATAPACKS: ""
       CF_PAGE_URL: "https://www.curseforge.com/minecraft/modpacks/beyond-depth/files/6246971"
       CF_API_KEY: %%CF_API_KEY%%
+      CF_EXCLUDE_MODS: |
+        1063296
+        271740
+        317269
       CURSEFORGE_FILES: |
         https://www.curseforge.com/minecraft/mc-mods/bluemap/files/5555753
       #  https://www.curseforge.com/minecraft/bukkit-plugins/dynmap/files/6090792 # PAPERMC dynmap
