@@ -34,6 +34,7 @@ services:
         - traefik.http.routers.file-browser.rule=Host(`wiemanboy.com`) && PathPrefix(`/files`)
         - traefik.http.routers.file-browser.entrypoints=websecure
         - traefik.http.routers.file-browser.tls.certresolver=wiemanboycom-resolver
+        - traefik.http.routers.file-browser.priority=100
 
 networks:
   reverse_proxy_network:
