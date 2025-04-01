@@ -6,6 +6,8 @@ services:
     environment:
       PUBLIC_API_BASE_URL: "https://jarnowieman.nl/api"
       PUBLIC_IMAGE_BASE_URL: "https://jarnowieman.nl/api/files"
+    volumes:
+      - ./data/wiemansite/images:/static/assets/images
     labels:
       - traefik.enable=true
 
@@ -18,117 +20,21 @@ services:
       - traefik.http.routers.WiemanSiteWB.tls.certresolver=wiemanboycom-resolver
 
 
-  wiemanimages:
-    image: wiemanboy/wiemanimages
-    networks:
-      - wiemanimages_network
-      - reverse_proxy_network
-    secrets:
-      - blobstore_access_key
-      - blobstore_secret_key
-      - auth0_domain
-      - auth0_client_id
-      - auth0_client_secret
-    environment:
-      S3_ENDPOINT: "http://blobstore:9000"
-      ACCESS_KEY_ID_FILE: /run/secrets/blobstore_access_key
-      SECRET_ACCESS_KEY_FILE: /run/secrets/blobstore_secret_key
-      BUCKET_NAME: "wiemansite"
-      REGION: "s-east-1"
-      AUTH0_DOMAIN_FILE: /run/secrets/auth0_domain
-      AUTH0_CLIENT_ID_FILE: /run/secrets/auth0_client_id
-      AUTH0_CLIENT_SECRET_FILE: /run/secrets/auth0_client_secret
-      AUTH0_CALLBACK_URL: "https://jarnowieman.nl/services/files/auth/callback"
-    labels:
-      - traefik.enable=true
-
-      - traefik.http.routers.api-redirect.rule=Host(`jarnowieman.nl`) && PathRegexp(`/((api|services)/files/).*`)
-      - traefik.http.routers.api-redirect.entrypoints=websecure
-      - traefik.http.routers.api-redirect.tls.certresolver=jarnowiemannl-resolver
-
-  blobstore:
-    image: localhost:5000/blobstore
-    networks:
-      - wiemanimages_network
-      - reverse_proxy_network
-    secrets:
-      - blobstore_access_key
-      - blobstore_secret_key
-    environment:
-      MINIO_ROOT_USER_FILE: /run/secrets/blobstore_access_key
-      MINIO_ROOT_PASSWORD_FILE: /run/secrets/blobstore_secret_key
-    labels:
-      - traefik.enable=true
-      - traefik.http.routers.blobstore.rule=Host(`blob.db.wiemanboy.com`)
-      - traefik.http.services.blobstore.loadbalancer.server.port=9001
-      - traefik.http.routers.blobstore.entrypoints=websecure
-      - traefik.http.routers.blobstore.tls.certresolver=wiemanboycom-resolver
-    volumes:
-      - ./data/minio:/data
-    command: server /data --console-address ":9001"
-
-  wiemanapi:
-    image: wiemanboy/wiemanapi
-    networks:
-      - wiemanapi_network
-      - reverse_proxy_network
-    secrets:
-      - doc_store_root_username
-      - doc_store_root_password
-      - auth0_domain
-      - auth0_client_id
-      - auth0_client_secret
-    environment:
-      MONGO_USER_FILE: /run/secrets/doc_store_root_username
-      MONGO_PASSWORD_FILE: /run/secrets/doc_store_root_password
-      MONGO_DB: profile_db
-      MONGO_HOST: doc-store
-      MONGO_PORT: 27017
-      AUTH0_DOMAIN_FILE: /run/secrets/auth0_domain
-      AUTH0_CLIENT_ID_FILE: /run/secrets/auth0_client_id
-      AUTH0_CLIENT_SECRET_FILE: /run/secrets/auth0_client_secret
-      AUTH0_AUDIENCE: "https://jarnowieman.nl/api/profiles/"
-      SPRING_PROFILES_ACTIVE: prod
-    labels:
-      - traefik.enable=true
-      - traefik.http.routers.wiemanapi.rule=Host(`jarnowieman.nl`) && (PathRegexp(`/((api|services)/profiles/).*`) || PathRegexp(`.*/okta.*`))
-      - traefik.http.routers.wiemanapi.entrypoints=websecure
-      - traefik.http.routers.wiemanapi.tls.certresolver=jarnowiemannl-resolver
-
-  doc-store:
-    image: mongo:4
-    networks:
-      - wiemanapi_network
-    secrets:
-      - doc_store_root_username
-      - doc_store_root_password
-    environment:
-      MONGO_INITDB_ROOT_USERNAME_FILE: /run/secrets/doc_store_root_username
-      MONGO_INITDB_ROOT_PASSWORD_FILE: /run/secrets/doc_store_root_username
-      MONGO_INITDB_DATABASE: profile_db
-    volumes:
-      - ./data/mongo:/data/db
-    ports:
-      - "27017:27017"
+  file-browser:
+      networks:
+        - reverse_proxy_network
+      image: hurlenko/filebrowser
+      environment:
+        FB_BASEURL: "/files"
+      volumes:
+        - ./data/wiemansite/images:/data
+        - ./data/filebrowser/config:/config
+      labels:
+        - traefik.enable=true
+        - traefik.http.routers.file-browser.rule=Host(`wiemanboy.com`) && PathPrefix(`/files`)
+        - traefik.http.routers.file-browser.entrypoints=websecure
+        - traefik.http.routers.file-browser.tls.certresolver=wiemanboycom-resolver
 
 networks:
   reverse_proxy_network:
-    external: true
-  wiemanapi_network:
-  wiemanimages_network:
-
-secrets:
-  blobstore_access_key:
-    external: true
-  blobstore_secret_key:
-    external: true
-  doc_store_root_username:
-    external: true
-  doc_store_root_password:
-    external: true
-  auth0_domain:
-    external: true
-  auth0_client_id:
-    external: true
-  auth0_client_secret:
     external: true
