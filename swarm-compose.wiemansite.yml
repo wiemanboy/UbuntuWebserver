@@ -7,7 +7,7 @@ services:
       PUBLIC_API_BASE_URL: "https://jarnowieman.nl/api"
       PUBLIC_IMAGE_BASE_URL: "https://jarnowieman.nl/api/files"
     volumes:
-      - ./data/wiemansite/images:/static/assets/images
+      - ./data/wiemansite/images:/app/build/client/assets/images
     labels:
       - traefik.enable=true
 
