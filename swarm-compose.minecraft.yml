@@ -9,28 +9,25 @@ services:
     environment:
       EULA: "TRUE"
       MAX_MEMORY: "16G"
-      TYPE: "AUTO_CURSEFORGE"
-      VERSION: "1.20.1"
+      TYPE: "VANILLA"
+      VERSION: "1.21.4"
       DIFFICULTY: "hard"
-      ICON: "https://jarnowieman.nl/api/files/minecraft/server_icon"
+      ICON: "https://wiemanboy.com/assets/images/JW_LOGO"
       MOTD: "§l§5WiemanServer§r\n§rWelcome to my server!"
-      VANILLATWEAKS_SHARECODE: "SQPPCu,M6j9tu"
+      VANILLATWEAKS_SHARECODE: "D50P0U,dOskEM"
       DATAPACKS: ""
-      CF_PAGE_URL: "https://www.curseforge.com/minecraft/modpacks/beyond-depth/files/6246971"
       CF_API_KEY: %%CF_API_KEY%%
-      CF_EXCLUDE_MODS: |
-        1063296
-        271740
-        317269
       CURSEFORGE_FILES: |
         https://www.curseforge.com/minecraft/mc-mods/bluemap/files/5555753
-      #  https://www.curseforge.com/minecraft/bukkit-plugins/dynmap/files/6090792 # PAPERMC dynmap
+      MODRINTH_PROJECTS: |
+        datapack:terralith
+        datapack:tectonic
       MAX_PLAYERS: "20"
       SNOOPER_ENABLED: "false"
       MAX_BUILD_HEIGHT: "256"
       SPAWN_PROTECTION: "0"
       VIEW_DISTANCE: "8"
-      LEVEL: "bd"
+      LEVEL: "vanilla-datapacks"
       ALLOW_FLIGHT: "TRUE"
       SERVER_NAME: "WiemanServer"
       PLAYER_IDLE_TIMEOUT: "0"
@@ -67,7 +64,7 @@ services:
       BACKUP_INTERVAL: "2h"
       RCON_HOST: "minecraft"
       RCON_PORT: "25575"
-      BACKUP_NAME: "bd"
+      BACKUP_NAME: "vanilla-datapacks"
       PRUNE_BACKUPS_DAYS: "7"
       PAUSE_IF_NO_PLAYERS: "true"
       PRE_BACKUP_SCRIPT: |
