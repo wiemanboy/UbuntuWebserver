@@ -16,11 +16,6 @@ services:
       GAME_CLIENT_PORT: 7778
       UDP_SOCKET_PORT: 7779
       GAME_MOD_IDS:
-    ports:
-      - "7778:7778/udp"
-      - "7779:7779/udp"
-      - "27020:27020/tcp"
-      - "27015:27015/udp"
     deploy:
       resources:
         limits:
