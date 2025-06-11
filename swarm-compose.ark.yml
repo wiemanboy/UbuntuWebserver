@@ -1,6 +1,6 @@
 services:
   ark:
-    image: hermsi/ark-server:latest
+    image: wiemanboy/ark-server:latest
     networks:
       - reverse_proxy_network
       - ark_network
