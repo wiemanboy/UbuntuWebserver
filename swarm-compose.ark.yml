@@ -11,8 +11,8 @@ services:
       SESSION_NAME: WiemanServer
       SERVER_MAP: TheIsland
       MAX_PLAYERS: 10
-      BACKUP_ON_STOP: true
-      DISABLE_BATTLEYE: true
+      BACKUP_ON_STOP: "true"
+      DISABLE_BATTLEYE: "true"
       GAME_CLIENT_PORT: 7778
       UDP_SOCKET_PORT: 7779
       GAME_MOD_IDS:
