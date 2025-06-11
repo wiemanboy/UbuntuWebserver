@@ -29,7 +29,7 @@ services:
       - traefik.http.services.ark.loadbalancer.server.scheme=https
       - traefik.http.routers.ark.tls.certresolver=wiemanboycom-resolver
 
-      - traefik.udp.routers.ark.entrypoints=ark-client ark-raw ark-steam
+      - traefik.udp.routers.ark.entrypoints=ark-client,ark-raw,ark-steam
 
 networks:
   reverse_proxy_network:
