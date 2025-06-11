@@ -23,6 +23,11 @@ services:
 
       - --entryPoints.minecraft.address=:25565
 
+      - --entryPoints.ark-client.address=:7778/udp
+      - --entryPoints.ark-raw.address=:7778/udp
+      - --entryPoints.ark-rcon.address=:27020/tcp
+      - --entryPoints.ark-steam.address=:27015/udp
+
       - --entrypoints.web.http.redirections.entryPoint.to=websecure
       - --entrypoints.web.http.redirections.entryPoint.scheme=https
       - --entrypoints.web.http.redirections.entrypoint.permanent=true
