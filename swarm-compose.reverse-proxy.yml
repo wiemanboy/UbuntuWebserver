@@ -23,10 +23,10 @@ services:
 
       - --entryPoints.minecraft.address=:25565
 
-      - --entryPoints.ark-client.address=:7778/udp
-      - --entryPoints.ark-raw.address=:7779/udp
-      - --entryPoints.ark-rcon.address=:27020/tcp
-      - --entryPoints.ark-steam.address=:27015/udp
+      #- --entryPoints.ark-client.address=:7778/udp
+      #- --entryPoints.ark-raw.address=:7779/udp
+      #- --entryPoints.ark-rcon.address=:27020/tcp
+      #- --entryPoints.ark-steam.address=:27015/udp
 
       - --entrypoints.web.http.redirections.entryPoint.to=websecure
       - --entrypoints.web.http.redirections.entryPoint.scheme=https
@@ -70,10 +70,10 @@ services:
       - "7777:7777"
       - "7777:7777/udp"
       - "8082:8082"
-      - "7778:7778/udp"
-      - "7779:7779/udp"
-      - "27020:27020/tcp"
-      - "27015:27015/udp"
+      #- "7778:7778/udp"
+      #- "7779:7779/udp"
+      #- "27020:27020/tcp"
+      #- "27015:27015/udp"
     volumes:
       - ./data/logs/reverse-proxy:/logs
       - ./data/letsencrypt:/letsencrypt

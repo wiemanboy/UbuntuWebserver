@@ -15,21 +15,27 @@ services:
       DISABLE_BATTLEYE: "true"
       GAME_CLIENT_PORT: 7778
       UDP_SOCKET_PORT: 7779
-      GAME_MOD_IDS:
     deploy:
       resources:
         limits:
           memory: 16G
         reservations:
           memory: 4G
+    ports:
+      - "7778:7778/udp"
+      - "7779:7779/udp"
+      - "27020:27020/tcp"
+      - "27015:27015/udp"
     labels:
       - traefik.enable=true
-      - traefik.http.routers.ark.rule=Host(`ark.wiemanboy.com`)
-      - traefik.http.routers.ark.entrypoints=ark-rcon
-      - traefik.http.services.ark.loadbalancer.server.scheme=https
-      - traefik.http.routers.ark.tls.certresolver=wiemanboycom-resolver
+      #- traefik.http.routers.ark.rule=Host(`ark.wiemanboy.com`)
+      #- traefik.http.routers.ark.entrypoints=ark-rcon
+      #- traefik.http.services.ark.loadbalancer.server.scheme=https
+      #- traefik.http.routers.ark.tls.certresolver=wiemanboycom-resolver
 
-      - traefik.udp.routers.ark.entrypoints=ark-client,ark-raw,ark-steam
+      #- traefik.udp.routers.ark.service=ark-service
+      #- traefik.udp.services.ark-service.loadbalancer.server.port=7778
+      #- traefik.udp.routers.ark.entrypoints=ark-client,ark-raw,ark-steam
 
 networks:
   reverse_proxy_network:
