@@ -9,7 +9,7 @@ services:
       - ./data/ark/backups:/home/steam/ARK-Backups
     environment:
       SESSION_NAME: WiemanServer
-      SERVER_MAP: Fjurdur
+      SERVER_MAP: Fjordur
       MAX_PLAYERS: 10
       BACKUP_ON_STOP: "true"
       DISABLE_BATTLEYE: "true"
