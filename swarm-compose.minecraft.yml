@@ -9,7 +9,7 @@ services:
     environment:
       EULA: "TRUE"
       MAX_MEMORY: "16G"
-      TYPE: "CURSEFORGE"
+      TYPE: "AUTO_CURSEFORGE"
       VERSION: "1.20.1"
       DIFFICULTY: "hard"
       ICON: "https://wiemanboy.com/assets/images/JW_LOGO"
