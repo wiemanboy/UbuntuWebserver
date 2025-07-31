@@ -29,7 +29,7 @@ services:
       PLAYER_IDLE_TIMEOUT: "0"
       EXEC_DIRECTLY: "true"
       ENABLE_WHITELIST: "true"
-      ONLINE_MODE: "true"
+      ONLINE_MODE: "false"
     volumes:
       - ./data/minecraft:/data
     ports:
