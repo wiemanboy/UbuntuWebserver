@@ -15,8 +15,7 @@ services:
       ICON: "https://wiemanboy.com/assets/images/JW_LOGO"
       MOTD: "§l§5WiemanServer§r\n§rWelcome to my server!"
       CF_PAGE_URL: "https://www.curseforge.com/minecraft/modpacks/beyond-depth/files/6804979"
-      CF_API_KEY: %%CF_API_KEY%% 
-      #/run/secrets/cf_api_key
+      CF_API_KEY_FILE: /run/secrets/cf_api_key
       CURSEFORGE_FILES: |
         https://www.curseforge.com/minecraft/mc-mods/bluemap/files/5555753
       MAX_PLAYERS: "20"
@@ -53,8 +52,8 @@ services:
       - traefik.http.routers.mcmap.rule=Host(`mc.wiemanboy.com`)
       - traefik.http.routers.mcmap.entrypoints=websecure
       - traefik.http.routers.mcmap.tls.certresolver=wiemanboycom-resolver
-    #secrets:
-    #  - cf_api_key
+    secrets:
+      - cf_api_key
 
   minecraft-backups:
     networks:
@@ -81,6 +80,6 @@ networks:
     external: true
   minecraft_network:
 
-#secrets:
-#  cf_api_key:
-#    file: cf_api_key.secret
+secrets:
+  cf_api_key:
+    external: true
