@@ -33,8 +33,8 @@ services:
     volumes:
       - ./data/minecraft:/data
     ports:
-      - ":25565"
-      - ":8123"
+      - "25565:25565"
+      - ":8100"
     deploy:
       resources:
         limits:
@@ -48,7 +48,7 @@ services:
       - traefik.tcp.routers.minecraft.entrypoints=minecraft
 
       - traefik.http.routers.mcmap.service=mcmap-service
-      - traefik.http.services.mcmap-service.loadbalancer.server.port=8123
+      - traefik.http.services.mcmap-service.loadbalancer.server.port=8100
       - traefik.http.routers.mcmap.rule=Host(`mc.wiemanboy.com`)
       - traefik.http.routers.mcmap.entrypoints=websecure
       - traefik.http.routers.mcmap.tls.certresolver=wiemanboycom-resolver
