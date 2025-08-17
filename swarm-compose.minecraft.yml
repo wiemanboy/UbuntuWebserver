@@ -18,6 +18,9 @@ services:
       CF_API_KEY_FILE: /run/secrets/cf_api_key
       CURSEFORGE_FILES: |
         https://www.curseforge.com/minecraft/mc-mods/bluemap/files/5555753
+      CF_EXCLUDE_MODS: |
+        686437
+        1180755
       MAX_PLAYERS: "20"
       SNOOPER_ENABLED: "false"
       MAX_BUILD_HEIGHT: "256"
