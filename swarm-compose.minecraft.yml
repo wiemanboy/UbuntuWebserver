@@ -10,29 +10,40 @@ services:
       EULA: "TRUE"
       MAX_MEMORY: "16G"
       TYPE: "AUTO_CURSEFORGE"
-      VERSION: "1.20.1"
+      VERSION: "1.21.8"
       DIFFICULTY: "hard"
       ICON: "https://wiemanboy.com/assets/images/JW_LOGO"
       MOTD: "§l§5WiemanServer§r\n§rWelcome to my server!"
-      CF_PAGE_URL: "https://www.curseforge.com/minecraft/modpacks/beyond-depth/files/6804979"
+      VANILLATWEAKS_SHARECODE: "D50P0U,dOskEM"
+      MODRINTH_PROJECTS: |
+        datapack:tool-trims
+        datapack:tectonic
+        datapack:mob-heads
+        datapack:village-hero-plus
+        datapack:warden-with-loot
+        datapack:banner-flags
+        datapack:dungeons-and-taverns
+        datapack:incendium
+        datapack:nullscape
+        datapack:blood-moon
+        datapack:ly-lucky-blocks
+        datapack:lucky-blocks-world
+        datapack:death-count
+      # CF_PAGE_URL: "https://www.curseforge.com/minecraft/modpacks/beyond-depth/files/6804979"
       CF_API_KEY_FILE: /run/secrets/cf_api_key
       CURSEFORGE_FILES: |
         https://www.curseforge.com/minecraft/mc-mods/bluemap/files/5555753
-      CF_EXCLUDE_MODS: |
-        686437
-        1180755
       MAX_PLAYERS: "20"
       SNOOPER_ENABLED: "false"
       MAX_BUILD_HEIGHT: "256"
       SPAWN_PROTECTION: "0"
       VIEW_DISTANCE: "8"
-      LEVEL: "beyond-depth"
+      LEVEL: "vanilla-sep-2025"
       ALLOW_FLIGHT: "TRUE"
       SERVER_NAME: "WiemanServer"
       PLAYER_IDLE_TIMEOUT: "0"
       EXEC_DIRECTLY: "true"
       ENABLE_WHITELIST: "true"
-      ONLINE_MODE: "false"
     volumes:
       - ./data/minecraft:/data
     ports:
@@ -66,7 +77,7 @@ services:
       BACKUP_INTERVAL: "2h"
       RCON_HOST: "minecraft"
       RCON_PORT: "25575"
-      BACKUP_NAME: "beyond-depth"
+      BACKUP_NAME: "vanilla-sep-2025"
       PRUNE_BACKUPS_DAYS: "7"
       PAUSE_IF_NO_PLAYERS: "true"
       PRE_BACKUP_SCRIPT: |
