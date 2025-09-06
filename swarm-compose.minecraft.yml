@@ -31,8 +31,8 @@ services:
         datapack:death-count
       # CF_PAGE_URL: "https://www.curseforge.com/minecraft/modpacks/beyond-depth/files/6804979"
       CF_API_KEY_FILE: /run/secrets/cf_api_key
-      CURSEFORGE_FILES: |
-        https://www.curseforge.com/minecraft/mc-mods/bluemap/files/6856709
+      # CURSEFORGE_FILES: |
+      #   https://www.curseforge.com/minecraft/mc-mods/bluemap/files/6856709
       MAX_PLAYERS: "20"
       SNOOPER_ENABLED: "false"
       MAX_BUILD_HEIGHT: "256"
