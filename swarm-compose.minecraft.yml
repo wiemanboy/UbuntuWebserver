@@ -29,7 +29,7 @@ services:
         datapack:ly-lucky-blocks
         datapack:lucky-blocks-world
         datapack:death-count
-      # CF_PAGE_URL: "https://www.curseforge.com/minecraft/modpacks/beyond-depth/files/6804979"
+      CF_PAGE_URL: "https://www.curseforge.com/minecraft/mc-mods/bluemap/files/6856709"
       CF_API_KEY_FILE: /run/secrets/cf_api_key
       # CURSEFORGE_FILES: |
       #   https://www.curseforge.com/minecraft/mc-mods/bluemap/files/6856709
