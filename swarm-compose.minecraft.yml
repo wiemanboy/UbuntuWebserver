@@ -26,6 +26,7 @@ services:
         datapack:ly-lucky-blocks
         datapack:lucky-blocks-world
         datapack:death-count
+        datapack:mine-treasure
       CF_API_KEY_FILE: /run/secrets/cf_api_key
       CURSEFORGE_FILES: bluemap
       MAX_PLAYERS: "20"
