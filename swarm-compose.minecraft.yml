@@ -9,7 +9,7 @@ services:
     environment:
       EULA: "TRUE"
       MAX_MEMORY: "16G"
-      TYPE: "CURSEFORGE"
+      TYPE: "AUTO_CURSEFORGE"
       VERSION: "1.21.8"
       DIFFICULTY: "hard"
       ICON: "https://wiemanboy.com/assets/images/JW_LOGO"
@@ -29,10 +29,8 @@ services:
         datapack:ly-lucky-blocks
         datapack:lucky-blocks-world
         datapack:death-count
-      CF_PAGE_URL: "https://www.curseforge.com/minecraft/mc-mods/bluemap/files/6856709"
       CF_API_KEY_FILE: /run/secrets/cf_api_key
-      CURSEFORGE_FILES: |
-        bluemap
+      CURSEFORGE_FILES: bluemap
       MAX_PLAYERS: "20"
       SNOOPER_ENABLED: "false"
       MAX_BUILD_HEIGHT: "256"
