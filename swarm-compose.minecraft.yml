@@ -16,14 +16,11 @@ services:
       MOTD: "§l§5WiemanServer§r\n§rWelcome to my server!"
       VANILLATWEAKS_SHARECODE: "D50P0U,dOskEM"
       MODRINTH_PROJECTS: |
-        datapack:tool-trims
         datapack:tectonic
         datapack:mob-heads
         datapack:village-hero-plus
-        datapack:warden-with-loot
         datapack:banner-flags
         datapack:dungeons-and-taverns
-        datapack:incendium
         datapack:nullscape
         datapack:blood-moon
         datapack:ly-lucky-blocks
